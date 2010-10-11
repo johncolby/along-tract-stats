@@ -12,8 +12,9 @@ function [scalar_mean,scalar_sd] = trk_mean_sc(header,tracks)
 %    tracks - Track data struc array [1 x nTracks]
 %
 % Outputs:
-%    scalar_mean - Mean of the scalar at each track point [nx1]
-%    scalar_sd   - Standard deviation of the scalar at each track point [nx1]
+%    scalar_mean - Mean of the scalar at each track point [nPoints x nScalars]
+%    scalar_sd   - Standard deviation of the scalar at each track point
+%                  [nPoints x nScalars]
 %
 % Example: 
 %    [header tracks]         = read_trk(trkPath);
@@ -34,10 +35,12 @@ function [scalar_mean,scalar_sd] = trk_mean_sc(header,tracks)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
 % Apr 2010 $Rev$ $Date$
 
+scalars = zeros(tracks(1).nPoints, header.n_count, header.n_scalars);
+
 for i=1:header.n_scalars
     mat_long = cat(1, tracks.matrix);
-    scalars  = reshape(mat_long(:,4), tracks(1).nPoints, header.n_count);
+    scalars(:,:,i)  = reshape(mat_long(:,4), tracks(1).nPoints, header.n_count, header.n_scalars);
 end
 
-scalar_mean = mean(scalars, 2);
-scalar_sd   = std(scalars, 0, 2);
+scalar_mean = squeeze(nanmean(scalars, 2));
+scalar_sd   = squeeze(nanstd(scalars, 0, 2));

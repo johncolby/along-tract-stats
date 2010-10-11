@@ -53,18 +53,19 @@ tracks_interp_str = trk_restruc(tracks_interp);
 % Plot the track group. The last input argument indicates the slice planes for 
 % volume overlays. Red markers indicate starting points. Note the random
 % ordering of tracks, with some "starting" in the cortex and some in the brainstem.
-figure, trk_plot(header, tracks_interp_str, volume, [95 114 4])
+figure, trk_plot(header, tracks_interp_str, volume, [95 78 4])
 view([30 30])
 
 %%
 % Reorder the tracks so that they all "start" in the same spot. The last input
-% argument here is a coordinate near the desired starting area.
+% argument here is a coordinate near the desired starting area. If left blank,
+% the origin will be determined interactively.
 tracks_interp     = trk_flip(header, tracks_interp, [97 110 4]);
 tracks_interp_str = trk_restruc(tracks_interp);
 
 %%
 % Plot the results again to see the difference.
-figure, trk_plot(header, tracks_interp_str, volume, [95 114 4])
+figure, trk_plot(header, tracks_interp_str, volume, [95 78 4])
 view([30 30])
 
 %% Extract scalars
@@ -100,7 +101,9 @@ track_mean = mean(tracks_interp, 3);
 % streamline should be added with the desired display ranges for the scalars, if
 % these exceed the ranges in the data.
 track_mean_sc     = [track_mean scalar_mean];
-track_mean_sc(1:2,:,2) = [0 0 0 0; 0 0 0.1 1];
+%                         x y z   sc1
+track_mean_sc(1:2,:,2) = [0 0 0   0;  %min
+                          0 0 0.1 1]; %max
 track_mean_sc_str = trk_restruc(track_mean_sc);
 
 %%

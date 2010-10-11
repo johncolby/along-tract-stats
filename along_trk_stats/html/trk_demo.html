@@ -6,7 +6,7 @@
    <!--
 This HTML is auto-generated from an M-file.
 To make changes, update the M-file and republish this document.
-      --><title>TrackVis/MATLAB Integration Demo</title><meta name="generator" content="MATLAB 7.9"><meta name="date" content="2010-09-27"><meta name="m-file" content="trk_demo"><style type="text/css">
+      --><title>TrackVis/MATLAB Integration Demo</title><meta name="generator" content="MATLAB 7.9"><meta name="date" content="2010-09-28"><meta name="m-file" content="trk_demo"><style type="text/css">
 
 body {
   background-color: white;
@@ -216,11 +216,11 @@ ans =
 
 </pre><h2>Fit curves<a name="7"></a></h2><p>Use cubic spline interpolation to make all tracks have the same number of vertices. The output is in matrix mode.</p><pre class="codeinput">tracks_interp = trk_interp(tracks, 100);
 </pre><p>Reformat the tracks back into a structure form.</p><pre class="codeinput">tracks_interp_str = trk_restruc(tracks_interp);
-</pre><p>Plot the track group. The last input argument indicates the slice planes for volume overlays. Red markers indicate starting points. Note the random ordering of tracks, with some "starting" in the cortex and some in the brainstem.</p><pre class="codeinput">figure, trk_plot(header, tracks_interp_str, volume, [95 114 4])
+</pre><p>Plot the track group. The last input argument indicates the slice planes for volume overlays. Red markers indicate starting points. Note the random ordering of tracks, with some "starting" in the cortex and some in the brainstem.</p><pre class="codeinput">figure, trk_plot(header, tracks_interp_str, volume, [95 78 4])
 view([30 30])
-</pre><img vspace="5" hspace="5" src="trk_demo_01.png" alt=""> <p>Reorder the tracks so that they all "start" in the same spot. The last input argument here is a coordinate near the desired starting area.</p><pre class="codeinput">tracks_interp     = trk_flip(header, tracks_interp, [97 110 4]);
+</pre><img vspace="5" hspace="5" src="trk_demo_01.png" alt=""> <p>Reorder the tracks so that they all "start" in the same spot. The last input argument here is a coordinate near the desired starting area. If left blank, the origin will be determined interactively.</p><pre class="codeinput">tracks_interp     = trk_flip(header, tracks_interp, [97 110 4]);
 tracks_interp_str = trk_restruc(tracks_interp);
-</pre><p>Plot the results again to see the difference.</p><pre class="codeinput">figure, trk_plot(header, tracks_interp_str, volume, [95 114 4])
+</pre><p>Plot the results again to see the difference.</p><pre class="codeinput">figure, trk_plot(header, tracks_interp_str, volume, [95 78 4])
 view([30 30])
 </pre><img vspace="5" hspace="5" src="trk_demo_02.png" alt=""> <h2>Extract scalars<a name="12"></a></h2><p>For each point along the streamlines in <tt>tracks_interp_str</tt>, extract the corresponding voxel intensity from <tt>volume</tt>.</p><pre class="codeinput">[header_sc tracks_sc] = trk_add_sc(header, tracks_interp_str, volume, <span class="string">'FA'</span>);
 </pre><p>Obtain the mean scalar at different points along the track</p><pre class="codeinput">[scalar_mean scalar_sd] = trk_mean_sc(header_sc, tracks_sc);
@@ -237,7 +237,9 @@ xlabel(<span class="string">'Distance along track (%)'</span>)
 ylabel(<span class="string">'Fractional Anisotropy (FA)'</span>)
 </pre><img vspace="5" hspace="5" src="trk_demo_03.png" alt=""> <h2>Export tracks<a name="15"></a></h2><p>The mean streamline geometry can also be calculated.</p><pre class="codeinput">track_mean = mean(tracks_interp, 3);
 </pre><p>This can be packaged up with the mean scalar values. Multiple scalars can be added, and can even include statistical significance values. A dummy streamline should be added with the desired display ranges for the scalars, if these exceed the ranges in the data.</p><pre class="codeinput">track_mean_sc     = [track_mean scalar_mean];
-track_mean_sc(1:2,:,2) = [0 0 0 0; 0 0 0.1 1];
+<span class="comment">%                         x y z   sc1</span>
+track_mean_sc(1:2,:,2) = [0 0 0   0;  <span class="comment">%min</span>
+                          0 0 0.1 1]; <span class="comment">%max</span>
 track_mean_sc_str = trk_restruc(track_mean_sc);
 </pre><p>Don't forget to update the header because now we only have 1 streamline instead of many.</p><pre class="codeinput">header_mean_sc         = header_sc;
 header_mean_sc.n_count = 1;
@@ -337,18 +339,19 @@ tracks_interp_str = trk_restruc(tracks_interp);
 % Plot the track group. The last input argument indicates the slice planes for 
 % volume overlays. Red markers indicate starting points. Note the random
 % ordering of tracks, with some "starting" in the cortex and some in the brainstem.
-figure, trk_plot(header, tracks_interp_str, volume, [95 114 4])
+figure, trk_plot(header, tracks_interp_str, volume, [95 78 4])
 view([30 30])
 
 %%
 % Reorder the tracks so that they all "start" in the same spot. The last input
-% argument here is a coordinate near the desired starting area.
+% argument here is a coordinate near the desired starting area. If left blank,
+% the origin will be determined interactively.
 tracks_interp     = trk_flip(header, tracks_interp, [97 110 4]);
 tracks_interp_str = trk_restruc(tracks_interp);
 
 %%
 % Plot the results again to see the difference.
-figure, trk_plot(header, tracks_interp_str, volume, [95 114 4])
+figure, trk_plot(header, tracks_interp_str, volume, [95 78 4])
 view([30 30])
 
 %% Extract scalars
@@ -384,7 +387,9 @@ track_mean = mean(tracks_interp, 3);
 % streamline should be added with the desired display ranges for the scalars, if
 % these exceed the ranges in the data.
 track_mean_sc     = [track_mean scalar_mean];
-track_mean_sc(1:2,:,2) = [0 0 0 0; 0 0 0.1 1];
+%                         x y z   sc1
+track_mean_sc(1:2,:,2) = [0 0 0   0;  %min
+                          0 0 0.1 1]; %max
 track_mean_sc_str = trk_restruc(track_mean_sc);
 
 %%

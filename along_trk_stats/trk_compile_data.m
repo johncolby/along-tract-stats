@@ -6,7 +6,7 @@ function [track_means,scalar_means,starting_pts_out] = trk_compile_data(subsDir,
 %
 % Inputs:
 %    subsDir    - Path to subject directory [char]
-%    subIDs     - List of subject ID folders in subsDir [n x 1 cell array]
+%    subIDs     - List of subject ID folders in subsDir [n x 1 cell or num array]
 %    tract_info - Dataset with tract names, default origins, and viewpoints
 %    nPts       - Number of points for tract interpolation (Default: 30)
 %    outDir     - Path to output directory. (Default: PWD)
@@ -62,14 +62,14 @@ tract_info.view    = cell2mat(cellfun(@eval, tract_info.view, 'UniformOutput',fa
 
 %% Setup output files and variables
 % Save one file for overall track properties
-fid3 = fopen(fullfile(outDir, 'trk_props_long.txt'), 'wt');
-fprintf(fid3, 'ID\tHemisphere\tTract\tStreamlines');
+fid1 = fopen(fullfile(outDir, 'trk_props_long.txt'), 'wt');
+fprintf(fid1, 'ID\tHemisphere\tTract\tStreamlines');
 
 % Save another file with the mean FA +/- SD at each point along the track
 fid2 = fopen(fullfile(outDir, 'trk_data.txt'), 'wt');
 fprintf(fid2, 'ID\tPoint\tHemisphere\tTract\tFA');
 
-% Initialize figures
+% Initialize QC figures
 for iFig=1:length(tract_info), fh(iFig) = figure; hold on; end
 
 % Initialize storage variables
@@ -110,7 +110,8 @@ for i=1:length(subIDs)
                 pt_start = tract_info.startPt(iTrk,:);
             end
             
-            % Reorient streamlines according to 'pt_start'
+            % Reorient streamlines according to 'pt_start'. Determine
+            % interactively if needed
             [tracks_interp pt_start] = trk_flip(header, tracks_interp, pt_start, volume);
             starting_pts_out = [starting_pts_out; dataset({subStr}, tract_info.Hemisphere(iTrk), tract_info.Tract(iTrk), pt_start,...
                 'VarNames',{'Subject','Hemisphere','Tract','Point'})];
@@ -119,19 +120,19 @@ for i=1:length(subIDs)
             % Extract scalar values from 'volume'
             [header_sc tracks_sc] = trk_add_sc(header,tracks_interp_str,volume,'FA');
             
-            % Determine the mean scalar at each point along the tract group
+            % Determine the mean scalar at each cross section along the tract group
             [scalar_means(:,iTrk,i) scalar_sd(:,iTrk)] = trk_mean_sc(header_sc,tracks_sc);
             
-            % Determine the mean streamline geometry
+            % Determine the mean streamline geometry for display in QC figures
             track_means(:,:,iTrk,i) = mean(tracks_interp, 3);
             
             % Write outputs
-            fprintf(fid3, '\n%s\t%s\t%s\t%d', subStr, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk}, header.n_count);
+            fprintf(fid1, '\n%s\t%s\t%s\t%d', subStr, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk}, header.n_count);
             for iPt=1:nPts
                 fprintf(fid2, '\n%s\t%d\t%s\t%s\t%0.4f', subStr, iPt, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk}, scalar_means(iPt,iTrk,i));
             end
         catch me % No streamlines
-            fprintf(fid3, '\n%s\t%s\t%s\t0', subStr, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk});
+            fprintf(fid1, '\n%s\t%s\t%s\t0', subStr, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk});
             fprintf('Failed to read subject %s %s\n', subStr, tract_info.Name{iTrk})
             warning(me.message)
         end
