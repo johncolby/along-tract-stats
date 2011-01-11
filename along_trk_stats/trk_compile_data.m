@@ -67,7 +67,7 @@ fprintf(fid1, 'ID\tHemisphere\tTract\tStreamlines');
 
 % Save another file with the mean FA +/- SD at each point along the track
 fid2 = fopen(fullfile(outDir, 'trk_data.txt'), 'wt');
-fprintf(fid2, 'ID\tPoint\tHemisphere\tTract\tFA');
+fprintf(fid2, 'ID\tPoint\tHemisphere\tTract\tFA\tSD');
 
 % Initialize QC figures
 for iFig=1:length(tract_info), fh(iFig) = figure; hold on; end
@@ -121,7 +121,7 @@ for i=1:length(subIDs)
             [header_sc tracks_sc] = trk_add_sc(header,tracks_interp_str,volume,'FA');
             
             % Determine the mean scalar at each cross section along the tract group
-            [scalar_means(:,iTrk,i) scalar_sd(:,iTrk)] = trk_mean_sc(header_sc,tracks_sc);
+            [scalar_means(:,iTrk,i) scalar_sd(:,iTrk,i)] = trk_mean_sc(header_sc,tracks_sc);
             
             % Determine the mean streamline geometry for display in QC figures
             track_means(:,:,iTrk,i) = mean(tracks_interp, 3);
@@ -129,7 +129,7 @@ for i=1:length(subIDs)
             % Write outputs
             fprintf(fid1, '\n%s\t%s\t%s\t%d', subStr, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk}, header.n_count);
             for iPt=1:nPts
-                fprintf(fid2, '\n%s\t%d\t%s\t%s\t%0.4f', subStr, iPt, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk}, scalar_means(iPt,iTrk,i));
+                fprintf(fid2, '\n%s\t%d\t%s\t%s\t%0.4f\t%0.4f', subStr, iPt, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk}, scalar_means(iPt,iTrk,i), scalar_sd(iPt,iTrk,i));
             end
         catch me % No streamlines
             fprintf(fid1, '\n%s\t%s\t%s\t0', subStr, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk});

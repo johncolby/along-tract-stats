@@ -41,9 +41,9 @@ if nargin < 4, volume = []; end
 
 % If no pt_start given, determine interactively
 if nargin < 3 || isempty(pt_start) || any(isnan(pt_start))
-    if isnumeric(tracks_in), tracks_in = trk_restruc(tracks_in); end
+    if isnumeric(tracks_in), tracks_in_str = trk_restruc(tracks_in); end
     fh = figure;
-    trk_plot(header, tracks_in, volume, slices);
+    trk_plot(header, tracks_in_str, volume, slices);
     dcm_obj = datacursormode(fh);
     datacursormode(fh, 'on')
     set(fh,'DeleteFcn','global c_info, c_info = getCursorInfo(datacursormode(gcbo));')

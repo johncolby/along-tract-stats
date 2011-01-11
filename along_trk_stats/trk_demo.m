@@ -108,9 +108,9 @@ track_mean_sc_str = trk_restruc(track_mean_sc);
 
 %%
 % Don't forget to update the header because now we only have 1 streamline
-% instead of many.
+% instead of many (plus the 1 dummy streamline).
 header_mean_sc         = header_sc;
-header_mean_sc.n_count = 1;
+header_mean_sc.n_count = 2;
 
 %%
 % Save the result back out to a .trk file for visualization in TrackVis.

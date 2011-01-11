@@ -1,4 +1,4 @@
-function trk_stats_overlay(exptDir,subDir,tract_info)
+function trk_stats_overlay(exptDir,subDir,tract_info,corrected)
 %TRK_STATS_OVERLAY - Overlay stats on an example subject's mean tract geometry
 %This function overlays the statistical results from R (effect sizes and
 %p-values) onto an example subject's mean tract geometry. The output is saved as
@@ -43,7 +43,7 @@ volPath = fullfile(subDir, 'DTI/diffusion_toolkit/dti_fa.nii.gz');
 volume  = read_avw(volPath);
 
 % Begin with a dummy tract to set scalar ranges
-track_mean_sc = zeros(nPts,5);
+track_mean_sc = zeros(30,5);
                          %x y z      sc1  sc2
 track_mean_sc(1:2,:,1) = [0 0 0     -0.1  0;  %min
                           0 0 0.1    0.1  1]; %max
@@ -65,7 +65,11 @@ for iTrk=1:length(Tracts)
         trk_plot(header, tracks_interp_str, volume, [48 48 1])
         
         % Extract the effect size and p-value scalars for this tract group
-        data = double(ds(strcmp(Tracts{iTrk}, ds.Tract) & strcmp(Hemispheres{iHemi}, ds.Hemisphere),{'Value' 'p0x2Evalue'}));
+        if corrected==1
+            data = double(ds(strcmp(Tracts{iTrk}, ds.Tract) & strcmp(Hemispheres{iHemi}, ds.Hemisphere),{'Value' 'p0x2Eval0x2Eadj'}));
+        else
+            data = double(ds(strcmp(Tracts{iTrk}, ds.Tract) & strcmp(Hemispheres{iHemi}, ds.Hemisphere),{'Value' 'p0x2Evalue'}));
+        end
         
         % Generate mean streamline gemoetry and attach scalars
         track_mean    = mean(tracks_interp, 3);
