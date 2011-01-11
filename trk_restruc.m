@@ -25,7 +25,7 @@ function [tracks_out,tiePoint] = trk_restruc(tracks_in,tiePoint)
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
-% Mar 2010 $Rev$ $Date$
+% Mar 2010
 
 if nargin < 2, tiePoint = []; end
 

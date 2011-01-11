@@ -26,7 +26,7 @@ function [header,tracks] = trk_add_sc(header,tracks,volume,name)
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
-% Apr 2010 $Rev$ $Date$
+% Apr 2010
 
 % Loop over # of tracks (slow...any faster way?)
 for iTrk=1:length(tracks)

@@ -44,7 +44,7 @@ function [track_means,scalar_means,starting_pts_out] = trk_compile_data(subsDir,
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
-% Sept 2010 $Rev$ $Date$
+% Sept 2010
 
 %% Check and format input arguments
 if nargin < 6 || isempty(starting_pts_in)

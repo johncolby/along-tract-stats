@@ -36,7 +36,7 @@ function [meanInt,stdInt,nVox] = trk_stats(header,tracks,volume,method)
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
-% Mar 2010 $Rev$ $Date$
+% Mar 2010
 
 % Input argument defaults
 if nargin < 4 || isempty(method), method = 'quick'; end

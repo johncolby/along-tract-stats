@@ -29,7 +29,7 @@ function trk_stats_overlay(exptDir,subDir,tract_info,corrected)
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
-% Sept 2010 $Rev$ $Date$
+% Sept 2010
 
 %% Load files and setup
 % Load the statistical results dataset from R

@@ -33,7 +33,7 @@ function [scalar_mean,scalar_sd] = trk_mean_sc(header,tracks)
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
-% Apr 2010 $Rev$ $Date$
+% Apr 2010
 
 scalars = zeros(tracks(1).nPoints, header.n_count, header.n_scalars);
 

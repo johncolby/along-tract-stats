@@ -34,7 +34,7 @@ function [tracks_out pt_start] = trk_flip(header,tracks_in,pt_start,volume,slice
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
-% Apr 2010 $Rev$ $Date$
+% Apr 2010
 
 if nargin < 5, slices = []; end
 if nargin < 4, volume = []; end

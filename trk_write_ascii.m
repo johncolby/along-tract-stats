@@ -30,7 +30,7 @@ function trk_write_ascii(tracks,filePath)
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
-% Oct 2010 $Rev$ $Date$
+% Oct 2010
 
 if nargin < 2 || isempty(filePath); filePath = fullfile(pwd, 'tracks.txt'); end
 if nargin < 1 || isempty(tracks); error('Must supply tracks to write.'); end

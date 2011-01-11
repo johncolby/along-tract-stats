@@ -23,7 +23,7 @@ function lengths = trk_length(tracks)
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
-% Apr 2010 $Rev$ $Date$
+% Apr 2010
  
 % Put in matrix form if possible
 if isstruct(tracks) && length(unique(cat(tracks.nPoints)))==1

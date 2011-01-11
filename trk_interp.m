@@ -35,7 +35,7 @@ function [tracks_interp,trk_mean_length] = trk_interp(tracks,nPoints_new,spacing
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
-% Apr 2010 $Rev$ $Date$
+% Apr 2010
 
 if nargin<3, spacing = []; end
 if nargin<2 || isempty(nPoints_new), nPoints_new = 100; end

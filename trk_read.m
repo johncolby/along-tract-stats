@@ -21,7 +21,7 @@ function [header,tracks] = trk_read(filePath)
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
-% Mar 2010 $Rev$ $Date$
+% Mar 2010
 
 % Parse in header
 fid    = fopen(filePath, 'r');

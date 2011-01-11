@@ -22,7 +22,7 @@ function trk_write(header,tracks,savePath)
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
-% Apr 2010 $Rev$ $Date$
+% Apr 2010
 
 fid = fopen(savePath, 'w');
 
