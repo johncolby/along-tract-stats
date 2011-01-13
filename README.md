@@ -25,15 +25,16 @@ Install
 - FSL (mainly for `read_avw`)
  
 ### Install
-1. Add the `along-tract-stats` directory to your matlab path.
+1. Click the Downloads link towards the top-right on Github. Download and extract either the .zip or .tar.gz versions.
+2. Add the `along-tract-stats` directory to your matlab path.
         addpath('/path/to/along-tract-stats')
-2. Add the FSL `matlab` directory to your matlab path.
+3. Add the FSL `matlab` directory to your matlab path.
         addpath('/path/to/fsl/etc/matlab')
 
-Support
--------
-- [Github Wiki](http://github.com/johncolby/along-tract-stats/wiki) - The main source of online documentation. Information on basic usage and tutorials.
-- [Colbyimaging Wiki](http://www.colbyimaging.com/wiki/neuroimaging/along-tract-stats) - Video tutorials (can't be embedded on Github)
+Support and Usage
+-----------------
+- [Github Wiki](http://github.com/johncolby/along-tract-stats/wiki/wiki) - The main source of online documentation. Information on basic usage and tutorials.
+- [Colbyimaging Wiki](http://www.colbyimaging.com/wiki/neuroimaging/along-tract-stats) - Video tutorials (can't be embedded on Github).
 - [Google groups](http://groups.google.com/group/along-tract-stats) - Questions, comments, feedback, bugs, etc.
 - Offline documentataion - There are several sources of offline documentation inluded with this package:
     - MATLAB help - Type `help <command_name>` at the MATLAB command prompt (e.g. `help trk_plot`) to get specific info on usage, inputs, and outputs for each function.
@@ -46,10 +47,10 @@ Support requests should be posted on the Google Groups discussion forum. For per
 
 John Colby
 
-Email: <johncolby@ucla.edu>
-UCLA Developmental Cognitive Neuroimaging Laboratory
-Department of Neurology
-David Geffen School of Medicine at UCLA
+Email: <johncolby@ucla.edu>  
+UCLA Developmental Cognitive Neuroimaging Laboratory  
+Department of Neurology  
+David Geffen School of Medicine at UCLA  
 
 License
 -------
