@@ -47,7 +47,7 @@ Support requests should be posted on the Google Groups discussion forum. For per
 
 John Colby
 
-Email: <johncolby@ucla.edu>  
+Email: <a href="&#x6D;&#x61;&#105;&#x6C;&#116;&#x6F;:&#106;&#111;&#104;&#x6E;&#x63;&#x6F;&#108;&#98;&#121;&#64;&#x75;c&#x6C;&#97;&#x2E;&#101;&#x64;&#117;">&#106;&#111;&#104;&#x6E;&#x63;&#x6F;&#108;&#98;&#121;&#64;&#x75;c&#x6C;&#97;&#x2E;&#101;&#x64;&#117;</a>  
 UCLA Developmental Cognitive Neuroimaging Laboratory  
 Department of Neurology  
 David Geffen School of Medicine at UCLA  
