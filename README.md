@@ -3,8 +3,7 @@
 1. Overview
 2. Install
 3. Support
-4. Contact
-5. License
+4. License
 
 Overview
 --------
@@ -39,18 +38,7 @@ Support and Usage
 - Offline documentataion - There are several sources of offline documentation inluded with this package:
     - MATLAB help - Type `help <command_name>` at the MATLAB command prompt (e.g. `help trk_plot`) to get specific info on usage, inputs, and outputs for each function.
     - MATLAB demo - Open the index.html file in the `html` directory to see the demo output that is published by `trk_demo.m`
-    - Inline code comments - The code is written in plain text with comments throughout.
-    
-Contact
--------
-Support requests should be posted on the Google Groups discussion forum. For personal contact, use:
-
-John Colby
-
-Email: <a href="&#x6D;&#x61;&#105;&#x6C;&#116;&#x6F;:&#106;&#111;&#104;&#x6E;&#x63;&#x6F;&#108;&#98;&#121;&#64;&#x75;c&#x6C;&#97;&#x2E;&#101;&#x64;&#117;">&#106;&#111;&#104;&#x6E;&#x63;&#x6F;&#108;&#98;&#121;&#64;&#x75;c&#x6C;&#97;&#x2E;&#101;&#x64;&#117;</a>  
-UCLA Developmental Cognitive Neuroimaging Laboratory  
-Department of Neurology  
-David Geffen School of Medicine at UCLA  
+    - Inline code comments - The code is written in plain text with comments throughout. 
 
 License
 -------
