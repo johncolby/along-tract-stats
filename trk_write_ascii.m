@@ -1,21 +1,14 @@
-function trk_write_ascii(tracks,filePath)
-%FUNCTION_NAME - One line description of what the function or script performs (H1 line)
-%Optional file header info (to give more details about the function than in the H1 line)
-%Optional file header info (to give more details about the function than in the H1 line)
-%Optional file header info (to give more details about the function than in the H1 line)
+function trk_write_ascii(tracks,savePath)
+%TRK_WRITE_ASCII - Save a tract group in an ASCII format for plotting in R
 %
-% Syntax: [output1,output2] = function_name(input1,input2,input3)
+% Syntax: trk_write_ascii(tracks,savePath)
 %
 % Inputs:
-%    input1 - Description
-%    input2 - Description
-%    input3 - Description
+%    tracks   - 
+%    savePath - 
 %
-% Outputs:
-%    output1 - Description [1 x n]
-%    output2 - Description strc array
-%      field1 - Description
-%      field2 - Description
+% Output files:
+%    Saves an ASCII data table with variables: Streamline, Point, x, y, z, FA
 %
 % Example: 
 %    Line 1 of example
@@ -32,10 +25,10 @@ function trk_write_ascii(tracks,filePath)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
 % Oct 2010
 
-if nargin < 2 || isempty(filePath); filePath = fullfile(pwd, 'tracks.txt'); end
+if nargin < 2 || isempty(savePath); savePath = fullfile(pwd, 'tracks.txt'); end
 if nargin < 1 || isempty(tracks); error('Must supply tracks to write.'); end
 
-fid = fopen(filePath, 'w');
+fid = fopen(savePath, 'w');
 
 nPts    = size(tracks, 1);
 nTracks = size(tracks, 3);

@@ -3,19 +3,25 @@ function [tracks_out,tiePoint] = trk_restruc(tracks_in,tiePoint)
 %If all tracks do not have the same length (i.e. TRK_INTERP has not been run)
 %then the matrix will be padded with NaNs.
 %
-% Syntax: tracks_out = trk_restack(tracks_in)
+% Syntax: [tracks_out,tiePoint] = trk_restack(tracks_in,tiePoint)
 %
 % Inputs:
 %    tracks_in - Tracks in matrix form [nPoints x 3+nScalars x nTracks] or
 %                Tracks in structure form [1 x nTracks]
+%    tiePoint  - Vertex index closest to the midpoint of the mean tract geometry
 %
 % Outputs:
 %    tracks_out - Track data in the opposite form
+%    tiePoint   - Modified tiePoint after flipping
 %
 % Example:
-%    [header tracks]   = trk_read(filePath)
-%    tracks_interp     = trk_interp(tracks, 100);
-%    tracks_interp_str = trk_restruc(tracks_interp);
+%    trkPath                 = fullfile(exDir, 'cst.trk');
+%    [header tracks]         = trk_read(trkPath);
+%    tracks_interp           = trk_interp(tracks, 100);
+%    tracks_interp           = trk_flip(header, tracks_interp, [97 110 4]);
+%    tracks_interp_str       = trk_restruc(tracks_interp);
+%    [header_sc tracks_sc]   = trk_add_sc(header, tracks_interp_str, volume, 'FA');
+%    [scalar_mean scalar_sd] = trk_mean_sc(header_sc, tracks_sc);
 %
 % Other m-files required: none
 % Subfunctions: none

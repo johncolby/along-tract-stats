@@ -1,7 +1,7 @@
 function trk_write(header,tracks,savePath)
 %TRK_WRITE - Write TrackVis .trk files
 %
-% Syntax: read_trk(header,tracks,savePath)
+% Syntax: trk_write(header,tracks,savePath)
 %
 % Inputs:
 %    header   - Header information for .trk file [struc]

@@ -14,9 +14,13 @@ function [header,tracks] = trk_add_sc(header,tracks,volume,name)
 %    tracks - Updated tracks structure
 %
 % Example: 
-%    [header tracks] = trk_read(trkPath);
-%    volume          = read_avw(volPath);
-%    [header,tracks] = add_scalar(header,tracks,volume,'FA')
+%    trkPath                 = fullfile(exDir, 'cst.trk');
+%    [header tracks]         = trk_read(trkPath);
+%    tracks_interp           = trk_interp(tracks, 100);
+%    tracks_interp           = trk_flip(header, tracks_interp, [97 110 4]);
+%    tracks_interp_str       = trk_restruc(tracks_interp);
+%    [header_sc tracks_sc]   = trk_add_sc(header, tracks_interp_str, volume, 'FA');
+%    [scalar_mean scalar_sd] = trk_mean_sc(header_sc, tracks_sc);
 %
 % Other m-files required: none
 % Subfunctions: none

@@ -6,7 +6,7 @@ function [tracks_out pt_start] = trk_flip(header,tracks_in,pt_start,volume,slice
 %tracks so that the terminal points nearest to point 'pt_start' will be the
 %starting points.
 %
-% Syntax: [tracks_out pt_start] = trk_flip(header,tracks_in,pt_start,volume)
+% Syntax: [tracks_out pt_start] = trk_flip(header,tracks_in,pt_start,volume,slices)
 %
 % Inputs:
 %    header    - Header information from .trk file [struc]
@@ -23,8 +23,13 @@ function [tracks_out pt_start] = trk_flip(header,tracks_in,pt_start,volume,slice
 %    pt_start   - Useful to collect the interactively found pt_starts
 %
 % Example:
-%    Try to get the corpus callosum start points in the left hemisphere
-%    tracks_interp_flp = trk_flip(header, tracks_interp, [145 39 28]);
+%    trkPath                 = fullfile(exDir, 'cst.trk');
+%    [header tracks]         = trk_read(trkPath);
+%    tracks_interp           = trk_interp(tracks, 100);
+%    tracks_interp           = trk_flip(header, tracks_interp, [97 110 4]);
+%    tracks_interp_str       = trk_restruc(tracks_interp);
+%    [header_sc tracks_sc]   = trk_add_sc(header, tracks_interp_str, volume, 'FA');
+%    [scalar_mean scalar_sd] = trk_mean_sc(header_sc, tracks_sc);
 %
 % Other m-files required: trk_plot
 % Subfunctions: none

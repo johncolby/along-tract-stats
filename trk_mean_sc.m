@@ -17,13 +17,13 @@ function [scalar_mean,scalar_sd] = trk_mean_sc(header,tracks)
 %                  [nPoints x nScalars]
 %
 % Example: 
-%    [header tracks]         = read_trk(trkPath);
-%    volume                  = read_avw(volPath);
+%    trkPath                 = fullfile(exDir, 'cst.trk');
+%    [header tracks]         = trk_read(trkPath);
 %    tracks_interp           = trk_interp(tracks, 100);
+%    tracks_interp           = trk_flip(header, tracks_interp, [97 110 4]);
 %    tracks_interp_str       = trk_restruc(tracks_interp);
-%    [header_sc tracks_sc]   = trk_add_sc(header,tracks_interp_str,volume,'FA')
-%    [scalar_mean scalar_sd] = trk_mean_sc(header_sc,tracks_sc);
-%    errorbar(scalar_mean, scalar_sd)
+%    [header_sc tracks_sc]   = trk_add_sc(header, tracks_interp_str, volume, 'FA');
+%    [scalar_mean scalar_sd] = trk_mean_sc(header_sc, tracks_sc);
 %
 % Other m-files required: none
 % Subfunctions: none

@@ -13,6 +13,10 @@ function [header,tracks] = trk_read(filePath)
 %      matrix  - XYZ coordinates and associated scalars [nPoints x 3+nScalars]
 %      props   - Properties of the whole tract
 %
+% Example:
+%    trkPath         = fullfile(exDir, 'cst.trk');
+%    [header tracks] = trk_read(trkPath);
+%
 % Other m-files required: none
 % Subfunctions: get_header
 % MAT-files required: none
