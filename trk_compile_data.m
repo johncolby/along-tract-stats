@@ -29,10 +29,10 @@ function [track_means,scalar_means,starting_pts_out] = trk_compile_data(subsDir,
 %    trk_props_long.txt - 
 %
 % Example: 
-%    subsDir = '/ifs/edevel/TRIO/DATA_ANALYSES/JC_MOD/ANALYSIS/prelim/SUBJECTS';
-%    subIDs  = num2cell([20037; 20103]);
-%    tract_info      = dataset('file', '/Users/jcolby/Documents/LONI/stats_along_tracts/tract_info.txt');
-%    starting_pts_in = dataset('file', '/ifs/edevel/TRIO/DATA_ANALYSES/JC_MOD/starting_pts.txt');
+%    subsDir         = exDir;
+%    subIDs          = {'subject1'};
+%    tract_info      = dataset('file', fullfile(exDir, 'tract_info.txt'));
+%    starting_pts_in = dataset('file', fullfile(exDir, 'starting_pts_out.txt'));
 %    [track_means,scalar_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,[],[],starting_pts_in);
 %
 % Other m-files required: read_avw, trk_read, trk_interp, trk_flip, trk_restruc,
@@ -84,7 +84,7 @@ for i=1:length(subIDs)
     
     % Load scalar volume
     % Note: Modify path according to your directory setup
-    volPath = fullfile(subsDir, subStr, 'DTI/diffusion_toolkit/dti_fa.nii.gz');
+    volPath = fullfile(subsDir, subStr, 'dti_fa.nii.gz');
     volume  = read_avw(volPath);
     
     % Loop over tracks
@@ -93,7 +93,8 @@ for i=1:length(subIDs)
         try
             % Load tract group
             % Note: Modify path according to your directory setup
-            trkPath = fullfile(subsDir, subStr, sprintf('%s.trk', tract_info.Name{iTrk}));
+            trkFile = sprintf('%s_%s.trk', tract_info.Tract{iTrk}, tract_info.Hemisphere{iTrk});
+            trkPath = fullfile(subsDir, subStr, trkFile);
             [header tracks] = trk_read(trkPath);
             
             % Interpolate streamlines
@@ -133,7 +134,7 @@ for i=1:length(subIDs)
             end
         catch me % No streamlines
             fprintf(fid1, '\n%s\t%s\t%s\t0', subStr, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk});
-            fprintf('Failed to read subject %s %s\n', subStr, tract_info.Name{iTrk})
+            fprintf('Failed to read subject %s %s\n', subStr, trkFile)
             warning(me.message)
         end
         
@@ -152,7 +153,7 @@ for iFig=1:length(tract_info)
     figure(fh(iFig))
     set(gcf, 'PaperSize', [10.5 8])
     set(gcf, 'PaperPosition', [0 0 10.5 8])
-    print(gcf, '-dpdf', fullfile(outDir, sprintf('Tracking_QC_%s.pdf', tract_info.Name{iFig})), '-r300')
+    print(gcf, '-dpdf', fullfile(outDir, sprintf('Tracking_QC_%s.pdf', trkFile)), '-r300')
 end
 
 export(starting_pts_out, 'file', fullfile(outDir, 'starting_pts_out.txt'))
