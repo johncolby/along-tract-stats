@@ -23,7 +23,7 @@ function [tracks_out pt_start] = trk_flip(header,tracks_in,pt_start,volume,slice
 %    pt_start   - Useful to collect the interactively found pt_starts
 %
 % Example:
-%    trkPath                 = fullfile(exDir, 'cst.trk');
+%    trkPath                 = fullfile(exDir, 'subject1', 'cst.trk');
 %    [header tracks]         = trk_read(trkPath);
 %    tracks_interp           = trk_interp(tracks, 100);
 %    tracks_interp           = trk_flip(header, tracks_interp, [97 110 4]);

@@ -1,5 +1,5 @@
 function trk_write_ascii(tracks,savePath)
-%TRK_WRITE_ASCII - Save a tract group in an ASCII format for plotting in R
+%TRK_WRITE_ASCII - Save a tract group in an ascii format for use in R
 %
 % Syntax: trk_write_ascii(tracks,savePath)
 %
