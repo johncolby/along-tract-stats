@@ -146,7 +146,7 @@ for iTrk=1:length(tract_info)
             % Draw QC figure
             figure
             subplot(5,5,i)
-            trk_plot(header, track_mean_sc_str, volume, [48 48 4])
+            trk_plot(header, track_mean_sc_str, volume, [])
             view(tract_info.view(iTrk,:))
             title(subStr)
             axis off
