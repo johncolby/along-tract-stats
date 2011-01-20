@@ -7,7 +7,7 @@
 
 Overview
 --------
-This is a set of tools for conducting an along-tract analysis of white matter fiber tracts derived from diffusion MRI data. It allows you to analyze a scalar metric (e.g. fractional ansiotropy; FA) parameterized along a tract, rather than the more typical method of collapsing the variability in these measures into single tract-averaged mean estimates.
+This is a set of tools for conducting an along-tract analysis of white matter fiber tracts derived from diffusion MRI data. It allows you to analyze a scalar metric (e.g. fractional anisotropy; FA) parameterized along a tract, rather than the more typical method of collapsing the variability in these measures into single tract-averaged mean estimates.
 
 This package contains 3 things:
 
@@ -35,7 +35,7 @@ Support and Usage
 - [Github Wiki](http://github.com/johncolby/along-tract-stats/wiki/-Table-of-Contents) - The main source of online documentation. Information on basic usage and tutorials.
 - [Colbyimaging Wiki](http://www.colbyimaging.com/wiki/neuroimaging/along-tract-stats) - Video tutorials (can't be embedded on Github).
 - [Google groups](http://groups.google.com/group/along-tract-stats) - Questions, comments, feedback, bugs, etc.
-- Offline documentataion - There are several sources of offline documentation inluded with this package:
+- Offline documentation - There are several sources of offline documentation included with this package:
     - MATLAB help - Type `help <command_name>` at the MATLAB command prompt (e.g. `help trk_plot`) to get specific info on usage, inputs, and outputs for each function.
     - MATLAB demo - Open the index.html file in the `html` directory to see the demo output that is published by `trk_demo.m`
     - Inline code comments - The code is written in plain text with comments throughout. 
