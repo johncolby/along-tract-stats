@@ -1,0 +1,2 @@
+Subject	Hemisphere	Tract	PointX	PointY	PointZ
+subject1	L	CST	131.06428527832	112.481986999512	24.3220138549805
