@@ -10,8 +10,9 @@
 
 %% Import tracks
 % Set paths to .trk file and scalar MRI volume (e.g. FA map).
-trkPath = '/Users/jcolby/Documents/LONI/DTI_Tutorial/20853/trackvis/cst.trk';
-volPath = '/Users/jcolby/Documents/LONI/DTI_Tutorial/20853/diffusion_toolkit/dti_fa.nii';
+subDir  = fullfile(exDir, 'subject1');
+trkPath = fullfile(subDir, 'CST_L.trk');
+volPath = fullfile(subDir, 'dti_fa.nii.gz');
 
 %%
 % Read in the scalar MRI volume with FSL tools. (See |$FSLDIR/etc/matlab|)
@@ -114,7 +115,7 @@ header_mean_sc.n_count = 2;
 
 %%
 % Save the result back out to a .trk file for visualization in TrackVis.
-savePath = '/Users/jcolby/Documents/LONI/DTI_Tutorial/20853/trackvis/cst_mean.trk';
+savePath = fullfile(exDir, 'CST_L_mean.trk');
 trk_write(header_mean_sc, track_mean_sc_str, savePath)
 %%
 % <<mean_track.png>>
