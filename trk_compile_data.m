@@ -1,7 +1,7 @@
-function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,outDir,starting_pts_in, saveASCII)
+function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,outDir,starting_pts_in, saveTrk, saveASCII)
 %TRK_COMPILE_DATA - Compiles along-tract data for subjects/hemispheres/tracts
 %
-% Syntax: [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,outDir,starting_pts_in)
+% Syntax: [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,outDir,starting_pts_in,saveTrk,saveASCII)
 %
 % Inputs:
 %    subsDir    - Path to subject directory [char]
@@ -10,7 +10,9 @@ function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_
 %    outDir     - Path to output directory. (Default: PWD)
 %    starting_pts_in - Dataset with tract origins. Useful for reusing past
 %        origins that were determined interactively
-%    saveASCII  - Save raw streamlines to ASCII files [logical] (Default: 0)
+%    saveTrk    - Save the mean tract geometries to .trk files? [logical]
+%        (Default: 0)
+%    saveASCII  - Save raw streamlines to ASCII files? [logical] (Default: 0)
 %
 % Outputs:
 %    track_means      - Structure array with mean tract geometries and along-tract
@@ -36,7 +38,7 @@ function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_
 %    [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,[],starting_pts_in);
 %
 % Other m-files required: read_avw, trk_read, trk_interp, trk_flip, trk_restruc,
-% trk_add_sc, trk_mean_sc, trk_plot, dataset, export
+% trk_add_sc, trk_mean_sc, trk_plot, trk_write_ascii, dataset, export
 % Subfunctions: none
 % MAT-files required: none
 %
@@ -47,7 +49,8 @@ function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_
 % Sept 2010
 
 %% Check and format input arguments  
-if nargin < 6 || isempty(saveASCII), saveASCII = 0; end
+if nargin < 7 || isempty(saveASCII), saveASCII = 0; end
+if nargin < 6 || isempty(saveTrk), saveTrk = 0; end
 if nargin < 5 || isempty(starting_pts_in)
     starting_pts_in = dataset();
 elseif ~iscell(starting_pts_in.Subject) % Reformat to cells if subIDs are all numeric
@@ -141,20 +144,14 @@ for iTrk=1:length(tract_info)
                 fprintf(fid2, '\n%s\t%d\t%s\t%s\t%0.4f\t%0.4f', subStr, iPt, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk}, scalar_mean(iPt), scalar_sd(iPt));
             end
             
-            % Save raw streamlines to ASCII if desired
-            if saveASCII
-                tracks_sc_mat = trk_restruc(tracks_sc);
-                trk_write_ascii(tracks_sc_mat, fullfile(outDir, sprintf('%s.txt', trkName)))
-            end
-            
             % Determine the mean streamline geometry for display in QC figures
             track_mean = mean(tracks_interp, 3);
-            track_mean_sc_str = trk_restruc([track_mean scalar_mean scalar_sd]);
+            track_mean_sc = [track_mean scalar_mean];
             
             % Draw QC figure
             figure
             subplot(5,5,i)
-            trk_plot(header, track_mean_sc_str, volume, [])
+            trk_plot(header, trk_restruc(track_mean_sc), volume, [])
             view(tract_info.view(iTrk,:))
             title(subStr)
             axis off
@@ -163,6 +160,24 @@ for iTrk=1:length(tract_info)
             set(gcf, 'PaperSize', [10.5 8])
             set(gcf, 'PaperPosition', [0 0 10.5 8])
             print(gcf, '-dpdf', fullfile(outDir, sprintf('Tracking_QC_%s.pdf', trkName)), '-r300')
+            
+            % Save the mean tract geometry if desired
+            if saveTrk
+                %                         x y z   sc1
+                track_mean_sc(1:2,:,2) = [0 0 0   0;  %min
+                                          0 0 0.1 1]; %max
+                track_mean_sc_str = trk_restruc(track_mean_sc);
+                
+                header_mean_sc = header_sc;
+                header_mean_sc.n_count = 2;
+                trk_write(header_mean_sc, track_mean_sc_str, fullfile(outDir, sprintf('%s_mean.trk', trkName)))
+            end
+            
+            % Save raw streamlines to ASCII if desired
+            if saveASCII
+                tracks_sc_mat = trk_restruc(tracks_sc);
+                trk_write_ascii(tracks_sc_mat, fullfile(outDir, sprintf('%s.txt', trkName)))
+            end
             
         catch me % No streamlines
             fprintf(fid1, '\n%s\t%s\t%s\t0', subStr, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk});
