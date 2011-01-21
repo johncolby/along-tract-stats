@@ -1,4 +1,4 @@
-function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,outDir,starting_pts_in)
+function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,outDir,starting_pts_in, saveASCII)
 %TRK_COMPILE_DATA - Compiles along-tract data for subjects/hemispheres/tracts
 %
 % Syntax: [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,outDir,starting_pts_in)
@@ -10,6 +10,7 @@ function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_
 %    outDir     - Path to output directory. (Default: PWD)
 %    starting_pts_in - Dataset with tract origins. Useful for reusing past
 %        origins that were determined interactively
+%    saveASCII  - Save raw streamlines to ASCII files [logical] (Default: 0)
 %
 % Outputs:
 %    track_means      - Structure array with mean tract geometries and along-tract
@@ -32,7 +33,7 @@ function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_
 %    subIDs          = {'subject1'};
 %    tract_info      = dataset('file', fullfile(exDir, 'tract_info.txt'));
 %    starting_pts_in = dataset('file', fullfile(exDir, 'starting_pts_out.txt'));
-%    [track_means,scalar_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,[],starting_pts_in);
+%    [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,[],starting_pts_in);
 %
 % Other m-files required: read_avw, trk_read, trk_interp, trk_flip, trk_restruc,
 % trk_add_sc, trk_mean_sc, trk_plot, dataset, export
@@ -45,7 +46,8 @@ function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
 % Sept 2010
 
-%% Check and format input arguments
+%% Check and format input arguments  
+if nargin < 6 || isempty(saveASCII), saveASCII = 0; end
 if nargin < 5 || isempty(starting_pts_in)
     starting_pts_in = dataset();
 elseif ~iscell(starting_pts_in.Subject) % Reformat to cells if subIDs are all numeric
@@ -92,8 +94,8 @@ for iTrk=1:length(tract_info)
             
             % Load tract group
             % Note: Modify path according to your directory setup
-            trkFile = sprintf('%s_%s.trk', tract_info.Tract{iTrk}, tract_info.Hemisphere{iTrk});
-            trkPath = fullfile(subsDir, subStr, trkFile);
+            trkName = sprintf('%s_%s', tract_info.Tract{iTrk}, tract_info.Hemisphere{iTrk});
+            trkPath = fullfile(subsDir, subStr, strcat(trkName, '.trk'));
             [header tracks] = trk_read(trkPath);
             
             % Determine # of interpolation points
@@ -139,6 +141,12 @@ for iTrk=1:length(tract_info)
                 fprintf(fid2, '\n%s\t%d\t%s\t%s\t%0.4f\t%0.4f', subStr, iPt, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk}, scalar_mean(iPt), scalar_sd(iPt));
             end
             
+            % Save raw streamlines to ASCII if desired
+            if saveASCII
+                tracks_sc_mat = trk_restruc(tracks_sc);
+                trk_write_ascii(tracks_sc_mat, fullfile(outDir, sprintf('%s.txt', trkName)))
+            end
+            
             % Determine the mean streamline geometry for display in QC figures
             track_mean = mean(tracks_interp, 3);
             track_mean_sc_str = trk_restruc([track_mean scalar_mean scalar_sd]);
@@ -154,12 +162,11 @@ for iTrk=1:length(tract_info)
             % Save QC figure
             set(gcf, 'PaperSize', [10.5 8])
             set(gcf, 'PaperPosition', [0 0 10.5 8])
-            trkName = sprintf('%s_%s', tract_info.Tract{iTrk}, tract_info.Hemisphere{iTrk});
             print(gcf, '-dpdf', fullfile(outDir, sprintf('Tracking_QC_%s.pdf', trkName)), '-r300')
             
         catch me % No streamlines
             fprintf(fid1, '\n%s\t%s\t%s\t0', subStr, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk});
-            fprintf('Failed to process subject %s %s\n', subStr, trkFile)
+            fprintf('Failed to process subject %s %s\n', subStr, trkName)
             warning(me.message)
         end
     end
