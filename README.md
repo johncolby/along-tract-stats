@@ -32,7 +32,7 @@ Install
 
 Support and Usage
 -----------------
-- [Github Wiki](http://github.com/johncolby/along-tract-stats/wiki/-Table-of-Contents) - The main source of online documentation. Information on basic usage and tutorials.
+- [Github Wiki](http://github.com/johncolby/along-tract-stats/wiki) - The main source of online documentation. Information on basic usage and tutorials.
 - [Colbyimaging Wiki](http://www.colbyimaging.com/wiki/neuroimaging/along-tract-stats) - Video tutorials (can't be embedded on Github).
 - [Google groups](http://groups.google.com/group/along-tract-stats) - Questions, comments, feedback, bugs, etc.
 - Offline documentation - There are several sources of offline documentation included with this package:
