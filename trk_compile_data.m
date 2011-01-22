@@ -16,7 +16,7 @@ function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_
 %
 % Outputs:
 %    track_means      - Structure array with mean tract geometries and along-tract
-%    scalar mean and standard deviation estimates.
+%    scalar mean estimates.
 %    starting_pts_out - Dataset with tract origins used for flipping. Possibly a
 %        combination of defaults stored in the tract_info dataset, and
 %        interactively chosen ones.
@@ -147,11 +147,12 @@ for iTrk=1:length(tract_info)
             % Determine the mean streamline geometry for display in QC figures
             track_mean = mean(tracks_interp, 3);
             track_mean_sc = [track_mean scalar_mean];
+            track_means = [track_means struct('Subject', subStr, 'Tract', tract_info.Tract{iTrk}, 'Hemisphere', tract_info.Hemisphere{iTrk}, 'track_mean_sc_str', trk_restruc(track_mean_sc))];
             
             % Draw QC figure
             figure
             subplot(5,5,i)
-            trk_plot(header, trk_restruc(track_mean_sc), volume, [])
+            trk_plot(header, track_means(iTrk).track_mean_sc_str, volume, [])
             view(tract_info.view(iTrk,:))
             title(subStr)
             axis off
