@@ -25,10 +25,10 @@ Install
  
 ### Install
 1. Click the Downloads link towards the top-right on Github. Download and extract either the .zip or .tar.gz versions.
-2. Add the `along-tract-stats` directory to your matlab path.
+2. Add the `along-tract-stats` directory to your matlab path. (Adjust these paths according to your setup)
         addpath('/path/to/along-tract-stats')
 3. Add the FSL `matlab` directory to your matlab path.
-        addpath('/path/to/fsl/etc/matlab')
+        addpath('/usr/local/fsl/etc/matlab')
 4. Set the `$FSLDIR` environment variable in MATLAB.
         setenv('FSLDIR', '/usr/local/fsl')
 
