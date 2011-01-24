@@ -29,6 +29,8 @@ Install
         addpath('/path/to/along-tract-stats')
 3. Add the FSL `matlab` directory to your matlab path.
         addpath('/path/to/fsl/etc/matlab')
+4. Set the `$FSLDIR` environment variable in MATLAB.
+        setenv('FSLDIR', '/usr/local/fsl')
 
 Support and Usage
 -----------------
