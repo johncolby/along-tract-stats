@@ -24,13 +24,12 @@ Install
 - FSL (mainly for `read_avw`)
  
 ### Install
-1. Click the Downloads link towards the top-right on Github. Download and extract either the .zip or .tar.gz versions.
+1. Click the [Downloads](http://github.com/johncolby/along-tract-stats/archives/master) link towards the top-right on Github. Download and extract either the .zip or .tar.gz versions.
 2. Add the `along-tract-stats` directory to your matlab path. (Adjust these paths according to your setup)
         addpath('/path/to/along-tract-stats')
 3. Add the FSL `matlab` directory to your matlab path.
         addpath('/usr/local/fsl/etc/matlab')
-4. Save these changes.
-        savepath
+4. Save these changes with `savepath`
 5. Set the `$FSLDIR` environment variable in MATLAB.
         setenv('FSLDIR', '/usr/local/fsl')
 6. To save this setting for future sessions, consider putting it in your [`startup.m`](http://www.mathworks.com/help/techdoc/ref/startup.html) file.
