@@ -1,6 +1,6 @@
 exDir    = '/path/to/along-tract-stats/example'
 trk_info = read.table(file.path(exDir, 'tract_info.txt'), header=T, sep='\t')
-trk_avgs = read.table(file.path(exDir, 'trk_avgs.txt'), header=T)
+trk_avgs = read.table(file.path(exDir, 'trk_avgs.txt'), header=T, sep='\t')
 
 library(ggplot2)
 
@@ -9,7 +9,7 @@ library(ggplot2)
 for(iTrk in 1:nrow(trk_info)){
     # Import/format data
     trkName = sprintf('%s_%s', trk_info$Tract[iTrk], trk_info$Hemisphere[iTrk])
-    path = file.path(exDir, sprintf('%s.txt', trkName)
+    path = file.path(exDir, sprintf('%s.txt', trkName))
     single_sub            = read.table(path, header=T)
     single_sub$Streamline = factor(single_sub$Streamline)
     single_sub$Point      = factor(single_sub$Point)

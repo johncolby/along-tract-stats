@@ -35,7 +35,7 @@ function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_
 %    subIDs          = {'subject1'};
 %    tract_info      = dataset('file', fullfile(exDir, 'tract_info.txt'));
 %    starting_pts_in = dataset('file', fullfile(exDir, 'starting_pts_out.txt'));
-%    [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,[],starting_pts_in);
+%    [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,[],starting_pts_in,1,1);
 %
 % Other m-files required: read_avw, trk_read, trk_interp, trk_flip, trk_restruc,
 % trk_add_sc, trk_mean_sc, trk_plot, trk_write_ascii, dataset, export

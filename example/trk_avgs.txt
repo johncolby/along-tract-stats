@@ -1,2 +1,2 @@
-"Mean.FA" "SD.FA"
-"1" 0.59 0.13
+Mean.FA	SD.FA
+0.59	0.13
