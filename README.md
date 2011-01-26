@@ -19,9 +19,15 @@ Install
 -------
 ### Requirements
 
-- MATLAB
-- MATLAB Spline toolbox (or Curve Fitting Toolbox as of r2010b)
-- FSL (mainly for `read_avw`)
+- [MATLAB](http://www.mathworks.com/products/matlab)
+- [MATLAB Curve Fitting Toolbox](http://www.mathworks.com/products/curvefitting) (or Spline Toolbox prior to r2010b)
+- [FSL](http://www.fmrib.ox.ac.uk/fsl) (mainly for `read_avw`)
+
+### Optional
+- [MATLAB Statistics Toolbox](http://www.mathworks.com/products/statistics): Nicely handle Excel-type data tables
+- [MATLAB Parallel Computing Toolbox](http://www.mathworks.com/products/parallel-computing): Speed up streamline processing
+- [TrackVis](http://www.trackvis.org): 3D visualization
+- [R](http://www.r-project.org): Statistical inference and graphics
  
 ### Install
 1. Click the [Downloads](http://github.com/johncolby/along-tract-stats/archives/master) link towards the top-right on Github. Download and extract either the .zip or .tar.gz versions.
@@ -29,7 +35,7 @@ Install
         addpath('/path/to/along-tract-stats')
 3. Add the FSL `matlab` directory to your matlab path.
         addpath('/usr/local/fsl/etc/matlab')
-4. Save these changes with `savepath`
+4. Save these changes with `savepath`.
 5. Set the `$FSLDIR` environment variable in MATLAB.
         setenv('FSLDIR', '/usr/local/fsl')
 6. To save this setting for future sessions, consider putting it in your [`startup.m`](http://www.mathworks.com/help/techdoc/ref/startup.html) file.
