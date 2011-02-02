@@ -69,7 +69,7 @@ if isnumeric(tracks_in)
         error('If you are going to deal with streamlines padded with NaNs (i.e. different lengths), they should be flipped FIRST.')
     end
     % Determine if the first or last track point is closer to 'pt_start'
-    if header.n_count==1
+    if length(size(tracks_in))==2  % Only 1 streamliine
         point_1   = sqrt(sum(bsxfun(@minus, tracks_in(1,:,:), pt_start).^2, 2));
         point_end = sqrt(sum(bsxfun(@minus, tracks_in(end,:,:), pt_start).^2, 2));
     else
