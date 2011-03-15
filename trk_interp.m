@@ -83,7 +83,7 @@ if ~isempty(spacing)
         % Also determine which vertex is the "tie down" point by finding the one
         % closest to the middle point of the mean tract geometry
         dists = sqrt(sum(bsxfun(@minus, tracks_interp(iTrk).matrix, middle).^2,2));
-        [~, ind] = min(dists);
+        [tmp, ind] = min(dists);
         tracks_interp(iTrk).tiePoint = ind;
     end
 end
