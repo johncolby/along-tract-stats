@@ -1,19 +1,20 @@
-function [tracks_interp,trk_mean_length] = trk_interp(tracks,nPoints_new,spacing)
+function [tracks_interp,trk_mean_length] = trk_interp(tracks,nPoints_new,spacing,tie_at_center)
 %TRK_INTERP - Interpolate tracks with cubic B-splines
-%Each interpolated track polyline will have the same number of vertices. Note
-%however that this does not give uniform spatial sampling, so shorter tracks
-%will end up with denser sampling than longer tracks. May be useful to groom
-%your tracks first. Can be multithreaded if Parallel Computing Toolbox is
-%installed.
+%Streamlines will be resampled to have a new number of vertices. May be useful
+%to groom your tracks first. Can be multithreaded if Parallel Computing Toolbox
+%is installed.
 %
-% Syntax: [tracks_interp,trk_mean_length] = trk_interp(tracks,nPoints_new,spacing)
+% Syntax: [tracks_interp,trk_mean_length] = trk_interp(tracks,nPoints_new,spacing,tie_at_center)
 %
 % Inputs:
 %    tracks      - Struc array output of TRK_READ [1 x nTracks]
-%    nPoints_new - Number of vertices for each streamlines (spacing 
+%    nPoints_new - Constant #: Number of vertices for each streamlines (spacing 
 %                  between vertices will vary between streamlines)
-%    spacing     - Spacing between each vertex (# of vertices will vary between
-%                  streamlines). Note: Only supply nPoints_new *OR* spacing!
+%    spacing     - Constant spacing: Spacing between each vertex (# of vertices
+%                  will vary between streamlines). Note: Only supply nPoints_new
+%                  *OR* spacing!
+%    tie_at_center - (Optional) Use with nPoints_new to add an additional
+%                  "tie-down" point at the midpoint of the tract. Recommended.
 %
 % Outputs:
 %    tracks_interp   - Interpolated tracks [nPoints_new x 3 x nTracks]
@@ -40,6 +41,7 @@ function [tracks_interp,trk_mean_length] = trk_interp(tracks,nPoints_new,spacing
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
 % Apr 2010
 
+if nargin<4, tie_at_center = []; end
 if nargin<3, spacing = []; end
 if nargin<2 || isempty(nPoints_new), nPoints_new = 100; end
 
@@ -63,6 +65,8 @@ parfor iTrk=1:length(tracks)
     tracks_interp(:,:,iTrk) = ppval(pp{iTrk}, linspace(0, max(dist), nPoints_new))';
 end
 
+% Interpolate streamlines so that the vertices have equal spacing for a central
+% "tie-down" origin. This means streamlines will have varying #s of vertices
 if ~isempty(spacing)
     % Calculate streamline lengths
     lengths = trk_length(tracks_interp);
@@ -86,4 +90,32 @@ if ~isempty(spacing)
         [tmp, ind] = min(dists);
         tracks_interp(iTrk).tiePoint = ind;
     end
+end
+
+% Streamlines will all have the same # of vertices, but now they will be spread
+% out so that an equal proportion lies on either side of a central origin. 
+if ~isempty(nPoints_new) && ~isempty(tie_at_center)
+    % Make nPoints_new odd
+    nPoints_new_odd = floor(nPoints_new/2)*2+1;
+    
+    % Calculate streamline lengths
+    lengths = trk_length(tracks_interp);
+    
+    % Determine the mean tract geometry and grab the middle vertex
+    track_mean      = mean(tracks_interp, 3);
+    trk_mean_length = trk_length(track_mean);
+    middle          = track_mean(round(length(track_mean)/2),:);
+    
+    tracks_interp_tmp = zeros(nPoints_new_odd, 3, length(tracks));
+    
+    parfor iTrk=1:length(tracks)
+        dists = sqrt(sum(bsxfun(@minus, tracks_interp(:,:,iTrk), middle).^2,2));
+        [~, ind] = min(dists);
+        
+        first_half  = ppval(pp{iTrk}, linspace(0, lengths(iTrk)*(ind/nPoints_new), ceil(nPoints_new_odd/2)))';
+        second_half = ppval(pp{iTrk}, linspace(lengths(iTrk)*(ind/nPoints_new), lengths(iTrk), ceil(nPoints_new_odd/2)))';
+        tracks_interp_tmp(:,:,iTrk) = [first_half; second_half(2:end,:)];
+    end
+    
+    tracks_interp = tracks_interp_tmp;
 end
