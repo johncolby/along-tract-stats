@@ -28,7 +28,7 @@ function trk_plot(header,tracks,volume,slices)
 
 % Input argument defaults
 if nargin < 4, slices = []; end
-if nargin == 3 && isempty(slices), slices = header.dim/2; end
+if nargin == 3 || isempty(slices), slices = header.dim/2; end
 
 if ~isstruct(tracks), error('Tracks must be in structure form. Try running TRK_RESTRUC first.'), end
 
