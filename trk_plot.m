@@ -1,14 +1,18 @@
-function trk_plot(header,tracks,volume,slices)
+function trk_plot(header,tracks,volume,slices,plottype)
 %TRK_PLOT - 3D plot of TrackVis .trk track group
 %
-% Syntax: trk_plot(header,tracks)
+% Syntax: trk_plot(header,tracks,volume,slices,plottype)
 %
 % Inputs:
-%    header - .trk file header 
-%    tracks - .trk file body
-%    volume - (optional) Scalar MRI volume to use for slice overlays
-%    slice  - (optional) XYZ slice planes (in voxels) for overlays [1 x 3] 
-%             (Default = [0 0 0]) Note: Y-coords from TrackVis need to be flipped.
+%    header  - .trk file header 
+%    tracks  - .trk file body
+%    volume  - (optional) Scalar MRI volume to use for slice overlays
+%    slice   - (optional) XYZ slice planes (in voxels) for overlays [1 x 3] 
+%              (Default = [0 0 0]) Note: Y-coords from TrackVis need to be flipped.
+%    plottype - (optional) Specify alternative plotting style. (Default is
+%               empty, which simple highlights streamline origins in red)
+%      rainbow   - Color encodes assumed correspondance, so like colors will be
+%                  collapse together.
 %
 % Outputs:
 %
@@ -27,18 +31,23 @@ function trk_plot(header,tracks,volume,slices)
 % Mar 2010
 
 % Input argument defaults
-if nargin < 4, slices = []; end
-if nargin == 3 || isempty(slices), slices = header.dim/2; end
+if nargin < 5, plottype = []; end
+if nargin < 4  || isempty(slices), slices = header.dim/2; end
 
 if ~isstruct(tracks), error('Tracks must be in structure form. Try running TRK_RESTRUC first.'), end
 
+% Plot streamlines
 hold on
 for iTrk = 1:length(tracks)
     matrix = tracks(iTrk).matrix;
     matrix(any(isnan(matrix),2),:) = [];
-    %plot3(matrix(:,1)/header.voxel_size(1), matrix(:,2)/header.voxel_size(2), matrix(:,3)/header.voxel_size(3))
-    plot3(matrix(:,1), matrix(:,2), matrix(:,3))
-    plot3(matrix(1,1), matrix(1,2), matrix(1,3), 'r.')
+    
+    if strcmp(plottype, 'rainbow')
+        cline(matrix(:,1), matrix(:,2), matrix(:,3), (0:(size(matrix, 1)-1))/size(matrix, 1))
+    else
+        plot3(matrix(:,1), matrix(:,2), matrix(:,3))
+        plot3(matrix(1,1), matrix(1,2), matrix(1,3), 'r.')
+    end
 end
 
 % Plot slice overlays
@@ -47,9 +56,19 @@ if nargin>2 && ~isempty(volume)
     [x, y, z] = meshgrid(header.voxel_size(1)*(0:(header.dim(1)-1)),...
                          header.voxel_size(2)*(0:(header.dim(2)-1)),...
                          header.voxel_size(3)*(0:(header.dim(3)-1)));
-    slice(x,y,z,permute(volume, [2 1 3]), slices(1), slices(2), slices(3));
+    h2 = slice(x,y,z,permute(volume, [2 1 3]), slices(1), slices(2), slices(3));
     shading flat
-    colormap(gray)
+    if strcmp(plottype, 'rainbow')
+        colormap([jet(100);gray(100)])
+        slice_cdata = get(h2, 'CData');
+        slice_cdata = cellfun(@(x) x+1, slice_cdata, 'UniformOutput', false);
+        for iSlice=1:3
+            set(h2(iSlice), 'CData', slice_cdata{iSlice});
+        end
+        caxis([0 2])
+    else
+        colormap(gray)
+    end
 end
 
 xlabel('x'), ylabel('y'), zlabel('z', 'Rotation', 0)
