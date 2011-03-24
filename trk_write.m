@@ -35,6 +35,7 @@ fwrite(fid, header.n_scalars , 'short');
 fwrite(fid, header.scalar_name', '*char');
 fwrite(fid, header.n_properties, 'short');
 fwrite(fid, header.property_name', '*char');
+fwrite(fid, header.vox_to_ras', 'float');
 fwrite(fid, header.reserved, '*char');
 fwrite(fid, header.voxel_order, '*char');
 fwrite(fid, header.pad2, '*char');
