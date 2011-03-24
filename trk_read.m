@@ -40,6 +40,12 @@ end
 
 if header.hdr_size~=1000, error('Header length is wrong'), end
 
+% Check orientation
+[tmp ix] = max(abs(header.image_orientation_patient(1:3)));
+[tmp iy] = max(abs(header.image_orientation_patient(4:6)));
+iz = 1:3;
+iz([ix iy]) = [];
+
 % Parse in body
 tracks(header.n_count).nPoints = 0;
 
@@ -50,12 +56,16 @@ for iTrk = 1:header.n_count
         tracks(iTrk).props = fread(fid, header.n_properties, 'float');
     end
     
-    tracks(iTrk).matrix(:,2) = header.dim(2)*header.voxel_size(2) - tracks(iTrk).matrix(:,2);
-    
-    % Modify orientation
-    %if header.invert_x==1, tracks(iTrk).matrix(:,1) = header.dim(1)*header.voxel_size(1) - tracks(iTrk).matrix(:,1); end
-    %if header.invert_y==1, tracks(iTrk).matrix(:,2) = header.dim(2)*header.voxel_size(2) - tracks(iTrk).matrix(:,2); end
-    %if header.invert_z==1, tracks(iTrk).matrix(:,3) = header.dim(3)*header.voxel_size(3) - tracks(iTrk).matrix(:,3); end
+    % Modify orientation of tracks (always LPS) to match orientation of volume
+    coords = tracks(iTrk).matrix(:,1:3);
+    coords = coords(:,[ix iy iz]);
+    if header.image_orientation_patient(ix) < 0
+        coords(:,ix) = header.dim(ix)*header.voxel_size(ix) - coords(:,ix);
+    end
+    if header.image_orientation_patient(3+iy) < 0
+        coords(:,iy) = header.dim(iy)*header.voxel_size(iy) - coords(:,iy);
+    end
+    tracks(iTrk).matrix(:,1:3) = coords;
 end
 
 fclose(fid);

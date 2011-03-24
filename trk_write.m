@@ -26,7 +26,7 @@ function trk_write(header,tracks,savePath)
 
 fid = fopen(savePath, 'w');
 
-%% Write header
+% Write header
 fwrite(fid, header.id_string, '*char');
 fwrite(fid, header.dim, 'short');
 fwrite(fid, header.voxel_size, 'float');
@@ -51,14 +51,24 @@ fwrite(fid, header.n_count, 'int');
 fwrite(fid, header.version, 'int');
 fwrite(fid, header.hdr_size, 'int');
 
-%% Write body
+% Check orientation
+[tmp ix] = max(abs(header.image_orientation_patient(1:3)));
+[tmp iy] = max(abs(header.image_orientation_patient(4:6)));
+iz = 1:3;
+iz([ix iy]) = [];
+
+% Write body
 for iTrk = 1:header.n_count
-    % Modify orientation
-    %if header.invert_x==1, tracks(iTrk).matrix(:,1) = header.dim(1)*header.voxel_size(1) - tracks(iTrk).matrix(:,1); end
-    %if header.invert_y==1, tracks(iTrk).matrix(:,2) = header.dim(2)*header.voxel_size(2) - tracks(iTrk).matrix(:,2); end
-    %if header.invert_z==1, tracks(iTrk).matrix(:,3) = header.dim(3)*header.voxel_size(3) - tracks(iTrk).matrix(:,3); end
-    
-    tracks(iTrk).matrix(:,2) = header.dim(2)*header.voxel_size(2) - tracks(iTrk).matrix(:,2);
+    % Modify orientation back to LPS for display in TrackVis
+    coords = tracks(iTrk).matrix(:,1:3);
+    coords = coords(:,[ix iy iz]);
+    if header.image_orientation_patient(ix) < 0
+        coords(:,ix) = header.dim(ix)*header.voxel_size(ix) - coords(:,ix);
+    end
+    if header.image_orientation_patient(3+iy) < 0
+        coords(:,iy) = header.dim(iy)*header.voxel_size(iy) - coords(:,iy);
+    end
+    tracks(iTrk).matrix(:,1:3) = coords;
     
     fwrite(fid, tracks(iTrk).nPoints, 'int');
     fwrite(fid, tracks(iTrk).matrix', 'float');
