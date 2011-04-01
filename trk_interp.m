@@ -99,7 +99,7 @@ if ~isempty(nPoints_new) && ~isempty(tie_at_center)
     nPoints_new_odd = floor(nPoints_new/2)*2+1;
     
     % Calculate streamline lengths
-    lengths = trk_length(tracks_interp);
+    lengths = trk_length(tracks);
     
     % Determine the mean tract geometry and grab the middle vertex
     track_mean      = mean(tracks_interp, 3);
