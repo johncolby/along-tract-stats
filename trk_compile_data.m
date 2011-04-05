@@ -72,9 +72,6 @@ fprintf(fid1, 'ID\tHemisphere\tTract\tStreamlines');
 fid2 = fopen(fullfile(outDir, 'trk_data.txt'), 'wt');
 fprintf(fid2, 'ID\tPoint\tHemisphere\tTract\tFA\tSD');
 
-% Initialize QC figures
-for iFig=1:length(tract_info), fh(iFig) = figure; hold on; end
-
 % Initialize variables
 track_means = struct([]);
 starting_pts_out = dataset();
@@ -83,6 +80,8 @@ starting_pts_out = dataset();
 % Loop over tracks
 for iTrk=1:length(tract_info)
     nPts_set = 0;
+    iplot    = 1;
+    fh       = figure; hold on
     
     % Loop over subjects
     for i=1:length(subIDs)
@@ -150,18 +149,23 @@ for iTrk=1:length(tract_info)
             track_means = [track_means struct('Subject', subStr, 'Tract', tract_info.Tract{iTrk}, 'Hemisphere', tract_info.Hemisphere{iTrk}, 'track_mean_sc_str', trk_restruc(track_mean_sc))];
             
             % Draw QC figure
-            figure
-            subplot(5,5,i)
-            trk_plot(header, track_means(iTrk).track_mean_sc_str, volume, [])
+            figure(fh)
+            subplot(5,5,i-25*(iplot-1))
+            trk_plot(header, trk_restruc(track_mean_sc), volume, [])
             view(tract_info.view(iTrk,:))
             title(subStr)
             axis off
             
-            % Save QC figure
-            set(gcf, 'PaperSize', [10.5 8])
-            set(gcf, 'PaperPosition', [0 0 10.5 8])
-            print(gcf, '-dpdf', fullfile(outDir, sprintf('Tracking_QC_%s.pdf', trkName)), '-r300')
-            
+            % Open a new QC figure if needed
+            if i/25 == iplot
+                set(gcf, 'PaperSize', [10.5 8])
+                set(gcf, 'PaperPosition', [0 0 10.5 8])
+                print(gcf, '-dpdf', fullfile(outDir, sprintf('Tracking_QC_%s_%d.pdf', trkName, iplot)), '-r300')
+                close(fh)
+                fh = figure; hold on
+                iplot = iplot+1;
+            end
+                        
             % Save the mean tract geometry if desired
             if saveTrk
                 %                         x y z   sc1
@@ -186,10 +190,15 @@ for iTrk=1:length(tract_info)
             warning(me.message)
         end
     end
+    
+    % Save QC figure
+    set(gcf, 'PaperSize', [10.5 8])
+    set(gcf, 'PaperPosition', [0 0 10.5 8])
+    print(gcf, '-dpdf', fullfile(outDir, sprintf('Tracking_QC_%s_%d.pdf', trkName, iplot)), '-r300')
+    close(fh)
 end
 
 %% Clean up
 export(starting_pts_out, 'file', fullfile(outDir, 'starting_pts_out.txt'))
 
-close all
 fclose all;
