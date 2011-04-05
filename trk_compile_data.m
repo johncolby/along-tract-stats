@@ -175,13 +175,13 @@ for iTrk=1:length(tract_info)
                 
                 header_mean_sc = header_sc;
                 header_mean_sc.n_count = 2;
-                trk_write(header_mean_sc, track_mean_sc_str, fullfile(outDir, sprintf('%s_mean.trk', trkName)))
+                trk_write(header_mean_sc, track_mean_sc_str, fullfile(outDir, sprintf('%s_%s_mean.trk', subStr, trkName)))
             end
             
             % Save raw streamlines to ASCII if desired
             if saveASCII
                 tracks_sc_mat = trk_restruc(tracks_sc);
-                trk_write_ascii(tracks_sc_mat, fullfile(outDir, sprintf('%s.txt', trkName)))
+                trk_write_ascii(tracks_sc_mat, fullfile(outDir, sprintf('%s_%s.txt', subStr, trkName)))
             end
             
         catch me % No streamlines
