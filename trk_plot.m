@@ -8,7 +8,7 @@ function trk_plot(header,tracks,volume,slices,plottype)
 %    tracks  - .trk file body
 %    volume  - (optional) Scalar MRI volume to use for slice overlays
 %    slice   - (optional) XYZ slice planes (in voxels) for overlays [1 x 3] 
-%              (Default = [0 0 0]) Note: Y-coords from TrackVis need to be flipped.
+%              (Default = header.dim/2) Note: Use MATLAB coords.
 %    plottype - (optional) Specify alternative plotting style. (Default is
 %               empty, which simple highlights streamline origins in red)
 %      rainbow   - Color encodes assumed correspondance, so like colors will be
@@ -52,11 +52,11 @@ end
 
 % Plot slice overlays
 if nargin>2 && ~isempty(volume)
-    slices    = slices.*header.voxel_size;
-    [x, y, z] = meshgrid(header.voxel_size(1)*(0:(header.dim(1)-1)),...
-                         header.voxel_size(2)*(0:(header.dim(2)-1)),...
-                         header.voxel_size(3)*(0:(header.dim(3)-1)));
-    h2 = slice(x,y,z,permute(volume, [2 1 3]), slices(1), slices(2), slices(3));
+    slices    = (slices - 0.5).*header.voxel_size;
+    [x, y, z] = meshgrid(header.voxel_size(1)*(0.5:header.dim(1)),...
+                         header.voxel_size(2)*(0.5:header.dim(2)),...
+                         header.voxel_size(3)*(0.5:header.dim(3)));
+    h2 = slice(x,y,z,permute(volume, [2 1 3]), slices(1), slices(2), slices(3), 'nearest');
     shading flat
     if strcmp(plottype, 'rainbow')
         colormap([jet(100);gray(100)])
