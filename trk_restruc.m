@@ -1,21 +1,26 @@
 function [tracks_out,tiePoint] = trk_restruc(tracks_in,tiePoint)
-%TRK_RESTRUC - Restrucutres track data between matrix and strucutre array forms
-%If all tracks do not have the same length (i.e. TRK_INTERP has not been run)
-%then the matrix will be padded with NaNs.
+%TRK_RESTRUC - Restrucutres streamline data between matrix and structure array
+%forms. If all streamlines do not have the same length (i.e. TRK_INTERP has not
+%been run) then the matrix will be padded with NaNs.
 %
-% Syntax: [tracks_out,tiePoint] = trk_restack(tracks_in,tiePoint)
+% Syntax: [tracks_out,tiePoint] = trk_restruc(tracks_in,tiePoint)
 %
 % Inputs:
 %    tracks_in - Tracks in matrix form [nPoints x 3+nScalars x nTracks] or
 %                Tracks in structure form [1 x nTracks]
 %    tiePoint  - Vertex index closest to the midpoint of the mean tract geometry
+%                (only relevant if using constant spacing mode for trk_interp)
 %
 % Outputs:
 %    tracks_out - Track data in the opposite form
 %    tiePoint   - Modified tiePoint after flipping
 %
 % Example:
-%    trkPath                 = fullfile(exDir, 'cst.trk');
+%    exDir                   = '/path/to/along-tract-stats/example';
+%    subDir                  = fullfile(exDir, 'subject1');
+%    trkPath                 = fullfile(subDir, 'CST_L.trk');
+%    volPath                 = fullfile(subDir, 'dti_fa.nii.gz');
+%    volume                  = read_avw(volPath);
 %    [header tracks]         = trk_read(trkPath);
 %    tracks_interp           = trk_interp(tracks, 100);
 %    tracks_interp           = trk_flip(header, tracks_interp, [97 110 4]);

@@ -29,13 +29,21 @@ function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_
 %        each subject/tract/hemisphere (for stats in R).
 %    trk_props_long.txt - Data table with number of streamlines for each
 %        subject/tract/hemisphere (for stats in R).
+%    <subID>_<trkName>.txt ? (Optionally) Raw streamlines from the original
+%        tract group in a plain text ASCII format for easy plotting in R.
+%        http://github.com/johncolby/along-tract-stats/wiki/single-subject
+%    <subID>_<trkName>_mean.trk ? (Optionally) Mean tract geometry with attached
+%        along-tract cross-sectional mean scalar metric (e.g. FA) for display in
+%        TrackVis.
+%        http://www.colbyimaging.com/wiki/neuroimaging/along-tract-stats#trackvis_visualization
+%        
 %
 % Example:
-%    subsDir         = exDir;
+%    exDir           = '/path/to/along-tract-stats/example';
 %    subIDs          = {'subject1'};
 %    tract_info      = dataset('file', fullfile(exDir, 'tract_info.txt'));
 %    starting_pts_in = dataset('file', fullfile(exDir, 'starting_pts_out.txt'));
-%    [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,[],starting_pts_in,1,1);
+%    [track_means,starting_pts_out] = trk_compile_data(exDir,subIDs,tract_info,[],starting_pts_in,1,1);
 %
 % Other m-files required: read_avw, trk_read, trk_interp, trk_flip, trk_restruc,
 % trk_add_sc, trk_mean_sc, trk_plot, trk_write_ascii, dataset, export

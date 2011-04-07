@@ -14,9 +14,12 @@ function trk_stats_overlay(efxFile,subDir,outDir,starting_pts_in)
 %        origins that were determined interactively
 %
 % Output files:
-%    results.trk - Saved in 'exptDir'. Load into TrackVis to visualize. 
+%    results.trk - Output tract group with 1 streamline for each tract/hemisphere
+%        in effects_table. Attached scalars include the effect sizes and p-values
+%        Load into TrackVis to visualize. 
 %
-% Example: 
+% Example:
+%    exDir           = '/path/to/along-tract-stats/example';
 %    efxFile         = fullfile(exDir, 'effects_table.txt');
 %    subDir          = fullfile(exDir, 'subject1');
 %    starting_pts_in = dataset('file', fullfile(exDir, 'starting_pts_out.txt'));

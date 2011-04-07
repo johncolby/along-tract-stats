@@ -2,28 +2,33 @@ function [tracks_out pt_start] = trk_flip(header,tracks_in,pt_start,volume,slice
 %TRK_FLIP - Flip the ordering of tracks
 %When TrackVis stores .trk files, the ordering of the points are not always
 %optimal (e.g. the corpus callosum will have some tracks starting on the left
-%and some on the right). TRK_FLIP attempts to help this problem by reordering
-%tracks so that the terminal points nearest to point 'pt_start' will be the
-%starting points.
+%and some on the right). TRK_FLIP solves this problem by reordering streamlines
+%so that the terminal points nearest to point 'pt_start' will be the starting
+%points.
 %
-% Syntax: [tracks_out pt_start] = trk_flip(header,tracks_in,pt_start,volume,slices)
+% Syntax: [tracks_out,pt_start] = trk_flip(header,tracks_in,pt_start,volume,slices)
 %
 % Inputs:
 %    header    - Header information from .trk file [struc]
 %    tracks_in - Tracks in matrix or structure form. Should NOT be padded with
 %                NaNs.
-%    pt_start  - XYZ voxel coordinates to which track start points will be
-%                matched. If not given, will determine interactively [1 x 3]
+%    pt_start  - XYZ voxel coordinates to which streamline start points will be
+%                matched. If not given, will determine interactively. [1 x 3]
 %    volume    - (optional) Useful if determining pt_start interactively
 %    slices    - (optional) Slice planes for 'volume'
 %
 % Outputs:
-%    tracks_out - Output track matrix. Same vertices as tracks_in, but the
-%                 ordering of some tracks will now be reversed.
-%    pt_start   - Useful to collect the interactively found pt_starts
+%    tracks_out - Output tracks (matrix or struc form, depending on input). Same
+%                 vertices as tracks_in, but the ordering of some tracks will
+%                 now be reversed.
+%    pt_start   - Useful to collect the interactively found pt_starts.
 %
 % Example:
-%    trkPath                 = fullfile(exDir, 'subject1', 'cst.trk');
+%    exDir                   = '/path/to/along-tract-stats/example';
+%    subDir                  = fullfile(exDir, 'subject1');
+%    trkPath                 = fullfile(subDir, 'CST_L.trk');
+%    volPath                 = fullfile(subDir, 'dti_fa.nii.gz');
+%    volume                  = read_avw(volPath);
 %    [header tracks]         = trk_read(trkPath);
 %    tracks_interp           = trk_interp(tracks, 100);
 %    tracks_interp           = trk_flip(header, tracks_interp, [97 110 4]);
@@ -31,11 +36,12 @@ function [tracks_out pt_start] = trk_flip(header,tracks_in,pt_start,volume,slice
 %    [header_sc tracks_sc]   = trk_add_sc(header, tracks_interp_str, volume, 'FA');
 %    [scalar_mean scalar_sd] = trk_mean_sc(header_sc, tracks_sc);
 %
-% Other m-files required: trk_plot
+% Other m-files required: trk_plot, trk_restruc
 % Subfunctions: none
 % MAT-files required: none
 %
 % See also: TRK_READ, TRK_INTERP
+%           http://www.colbyimaging.com/wiki/neuroimaging/along-tract-stats#interactive_trk_flip
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)

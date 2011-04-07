@@ -19,7 +19,7 @@ function [meanInt,stdInt,nVox] = trk_stats(header,tracks,volume,method)
 %      cubic   - Cubic interpolation instead of direct voxel lookup.
 %
 % Outputs:
-%    meanInt - Mean image volume intensity (e.g. FA) along a track group
+%    meanInt - Mean image volume intensity (e.g. FA) across an entire tract group
 %    stdInt  - Standard deviation of these intensities
 %    nVox    - Number of unique voxels traversed by the track group
 %

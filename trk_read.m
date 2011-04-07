@@ -1,5 +1,8 @@
 function [header,tracks] = trk_read(filePath)
 %TRK_READ - Load TrackVis .trk files
+%TrackVis displays and saves .trk files in LPS orientation. After import, this
+%function attempts to reorient the fibers to match the orientation of the
+%original volume data.
 %
 % Syntax: [header,tracks] = trk_read(filePath)
 %
@@ -8,13 +11,15 @@ function [header,tracks] = trk_read(filePath)
 %
 % Outputs:
 %    header - Header information from .trk file [struc]
-%    tracks - Track data struc array [1 x nTracks]
-%      nPoints - # of points in each track
+%    tracks - Track data structure array [1 x nTracks]
+%      nPoints - # of points in each streamline
 %      matrix  - XYZ coordinates and associated scalars [nPoints x 3+nScalars]
-%      props   - Properties of the whole tract
+%      props   - Properties of the whole tract (ex: length)
 %
 % Example:
-%    trkPath         = fullfile(exDir, 'cst.trk');
+%    exDir           = '/path/to/along-tract-stats/example';
+%    subDir          = fullfile(exDir, 'subject1');
+%    trkPath         = fullfile(subDir, 'CST_L.trk');
 %    [header tracks] = trk_read(trkPath);
 %
 % Other m-files required: none
@@ -22,6 +27,7 @@ function [header,tracks] = trk_read(filePath)
 % MAT-files required: none
 %
 % See also: http://www.trackvis.org/docs/?subsect=fileformat
+%           http://github.com/johncolby/along-tract-stats/wiki/orientation
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
@@ -57,6 +63,8 @@ for iTrk = 1:header.n_count
     end
     
     % Modify orientation of tracks (always LPS) to match orientation of volume
+    header.dim        = header.dim([ix iy iz]);
+    header.voxel_size = header.voxel_size([ix iy iz]);
     coords = tracks(iTrk).matrix(:,1:3);
     coords = coords(:,[ix iy iz]);
     if header.image_orientation_patient(ix) < 0

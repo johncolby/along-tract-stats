@@ -17,7 +17,11 @@ function [scalar_mean,scalar_sd] = trk_mean_sc(header,tracks)
 %                  [nPoints x nScalars]
 %
 % Example: 
-%    trkPath                 = fullfile(exDir, 'cst.trk');
+%    exDir                   = '/path/to/along-tract-stats/example';
+%    subDir                  = fullfile(exDir, 'subject1');
+%    trkPath                 = fullfile(subDir, 'CST_L.trk');
+%    volPath                 = fullfile(subDir, 'dti_fa.nii.gz');
+%    volume                  = read_avw(volPath);
 %    [header tracks]         = trk_read(trkPath);
 %    tracks_interp           = trk_interp(tracks, 100);
 %    tracks_interp           = trk_flip(header, tracks_interp, [97 110 4]);
@@ -38,7 +42,7 @@ function [scalar_mean,scalar_sd] = trk_mean_sc(header,tracks)
 scalars = zeros(tracks(1).nPoints, header.n_count, header.n_scalars);
 
 for i=1:header.n_scalars
-    mat_long = cat(1, tracks.matrix);
+    mat_long        = cat(1, tracks.matrix);
     scalars(:,:,i)  = reshape(mat_long(:,4), tracks(1).nPoints, header.n_count, header.n_scalars);
 end
 

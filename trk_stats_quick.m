@@ -1,5 +1,5 @@
 function [meanInt,stdInt,nVox] = trk_stats_quick(header,tracks,volume,method)
-%TRK_STATS - Compute intensity statistics about a volume within a track group
+%TRK_STATS_QUICK - Compute intensity statistics about a volume within a track group
 %Use this function to extract the mean/etc. of a scalar MRI volume within a
 %select track group of interest. For instance, you could calculate the mean
 %FA within the left corticospinal tract.

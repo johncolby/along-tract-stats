@@ -60,6 +60,8 @@ iz([ix iy]) = [];
 % Write body
 for iTrk = 1:header.n_count
     % Modify orientation back to LPS for display in TrackVis
+    header.dim        = header.dim([ix iy iz]);
+    header.voxel_size = header.voxel_size([ix iy iz]);
     coords = tracks(iTrk).matrix(:,1:3);
     coords = coords(:,[ix iy iz]);
     if header.image_orientation_patient(ix) < 0

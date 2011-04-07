@@ -1,5 +1,7 @@
 function [header,tracks] = trk_add_sc(header,tracks,volume,name)
-%TRK_ADD_SC - Adds a scalar value to each vertex in a .trk track group
+%TRK_ADD_SC - Attaches a scalar value to each vertex in a .trk track group
+%For example, this function will look in an FA volume, and attach the
+%corresponding voxel FA value to each streamline vertex.
 %
 % Syntax: [header,tracks] = trk_add_sc(header,tracks,volume,name)
 %
@@ -14,7 +16,11 @@ function [header,tracks] = trk_add_sc(header,tracks,volume,name)
 %    tracks - Updated tracks structure
 %
 % Example: 
-%    trkPath                 = fullfile(exDir, 'cst.trk');
+%    exDir                   = '/path/to/along-tract-stats/example';
+%    subDir                  = fullfile(exDir, 'subject1');
+%    trkPath                 = fullfile(subDir, 'CST_L.trk');
+%    volPath                 = fullfile(subDir, 'dti_fa.nii.gz');
+%    volume                  = read_avw(volPath);
 %    [header tracks]         = trk_read(trkPath);
 %    tracks_interp           = trk_interp(tracks, 100);
 %    tracks_interp           = trk_flip(header, tracks_interp, [97 110 4]);
@@ -38,8 +44,8 @@ for iTrk=1:length(tracks)
     vox = ceil(tracks(iTrk).matrix ./ repmat(header.voxel_size, tracks(iTrk).nPoints,1));
     
     % Index into volume to extract scalar values
-    inds    = sub2ind(header.dim, vox(:,1), vox(:,2), vox(:,3));
-    scalars = volume(inds);
+    inds                = sub2ind(header.dim, vox(:,1), vox(:,2), vox(:,3));
+    scalars             = volume(inds);
     tracks(iTrk).matrix = [tracks(iTrk).matrix, scalars];
 end
 

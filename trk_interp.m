@@ -8,22 +8,29 @@ function [tracks_interp,trk_mean_length] = trk_interp(tracks,nPoints_new,spacing
 %
 % Inputs:
 %    tracks      - Struc array output of TRK_READ [1 x nTracks]
-%    nPoints_new - Constant #: Number of vertices for each streamlines (spacing 
-%                  between vertices will vary between streamlines)
-%    spacing     - Constant spacing: Spacing between each vertex (# of vertices
-%                  will vary between streamlines). Note: Only supply nPoints_new
-%                  *OR* spacing!
+%    nPoints_new - Constant # mode: Number of vertices for each streamline
+%                  (spacing between vertices will vary between streamlines)
+%                  (Default: 100)
+%    spacing     - Constant spacing mode: Spacing between each vertex (# of
+%                  vertices will vary between streamlines). Note: Only supply
+%                  nPoints_new *OR* spacing!
 %    tie_at_center - (Optional) Use with nPoints_new to add an additional
 %                  "tie-down" point at the midpoint of the tract. Recommended.
+%                  http://github.com/johncolby/along-tract-stats/wiki/tie-at-center
 %
 % Outputs:
-%    tracks_interp   - Interpolated tracks [nPoints_new x 3 x nTracks]
+%    tracks_interp   - Interpolated tracks in matrix format.
+%                      [nPoints_new x 3 x nTracks]
 %    trk_mean_length - The length of the mean tract geometry if using the
-%                      spacing parameter, above. Useful to normalize track
+%                      spacing parameter, above. Useful to then normalize track
 %                      lengths between subjects.
 %
 % Example:
-%    trkPath                 = fullfile(exDir, 'cst.trk');
+%    exDir                   = '/path/to/along-tract-stats/example';
+%    subDir                  = fullfile(exDir, 'subject1');
+%    trkPath                 = fullfile(subDir, 'CST_L.trk');
+%    volPath                 = fullfile(subDir, 'dti_fa.nii.gz');
+%    volume                  = read_avw(volPath);
 %    [header tracks]         = trk_read(trkPath);
 %    tracks_interp           = trk_interp(tracks, 100);
 %    tracks_interp           = trk_flip(header, tracks_interp, [97 110 4]);
@@ -31,7 +38,7 @@ function [tracks_interp,trk_mean_length] = trk_interp(tracks,nPoints_new,spacing
 %    [header_sc tracks_sc]   = trk_add_sc(header, tracks_interp_str, volume, 'FA');
 %    [scalar_mean scalar_sd] = trk_mean_sc(header_sc, tracks_sc);
 %
-% Other m-files required: Spline Toolbox
+% Other m-files required: Curve Fitting Toolbox (aka Spline Toolbox)
 % Subfunctions: none
 % MAT-files required: none
 %
@@ -50,7 +57,7 @@ trk_mean_length = [];
 pp = repmat({[]},length(tracks));
 
 % Interpolate streamlines so that each has the same number of vertices, spread
-% evenly along each streamline (i.e. vertex spacing will vary between streamlines)
+% evenly along its length (i.e. vertex spacing will vary between streamlines)
 parfor iTrk=1:length(tracks)
     tracks_tmp = tracks(iTrk);
     

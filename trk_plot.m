@@ -8,11 +8,11 @@ function trk_plot(header,tracks,volume,slices,plottype)
 %    tracks  - .trk file body
 %    volume  - (optional) Scalar MRI volume to use for slice overlays
 %    slice   - (optional) XYZ slice planes (in voxels) for overlays [1 x 3] 
-%              (Default = header.dim/2) Note: Use MATLAB coords.
+%              (Default: header.dim/2) Note: Use MATLAB coordinates.
 %    plottype - (optional) Specify alternative plotting style. (Default is
-%               empty, which simple highlights streamline origins in red)
+%               empty, which simply highlights streamline origins in red)
 %      rainbow   - Color encodes assumed correspondance, so like colors will be
-%                  collapse together.
+%                  collapsed together.
 %
 % Outputs:
 %
@@ -25,6 +25,7 @@ function trk_plot(header,tracks,volume,slices,plottype)
 % MAT-files required: none
 %
 % See also: TRK_READ
+%           http://github.com/johncolby/along-tract-stats/wiki/correspondence
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)

@@ -4,22 +4,31 @@ function trk_write_ascii(tracks,savePath)
 % Syntax: trk_write_ascii(tracks,savePath)
 %
 % Inputs:
-%    tracks   - 
-%    savePath - 
+%    tracks   - Track data in matrix form with 1 scalar attached (assumed to be FA)
+%               [nPts x 4 x nTracks]
+%    savePath - Path and name of desired output file.
 %
 % Output files:
 %    Saves an ASCII data table with variables: Streamline, Point, x, y, z, FA
 %
 % Example: 
-%    Line 1 of example
-%    Line 2 of example
-%    Line 3 of example
+%    exDir                   = '/path/to/along-tract-stats/example';
+%    subDir                  = fullfile(exDir, 'subject1');
+%    trkPath                 = fullfile(subDir, 'CST_L.trk');
+%    volPath                 = fullfile(subDir, 'dti_fa.nii.gz');
+%    volume                  = read_avw(volPath);
+%    [header tracks]         = trk_read(trkPath);
+%    tracks_interp           = trk_interp(tracks, 100);
+%    tracks_interp           = trk_flip(header, tracks_interp, [97 110 4]);
+%    tracks_interp_str       = trk_restruc(tracks_interp);
+%    [header_sc tracks_sc]   = trk_add_sc(header, tracks_interp_str, volume, 'FA');
+%    trk_write_ascii(trk_restruc(tracks_sc), 'streamlines.txt')
 %
 % Other m-files required: none
 % Subfunctions: none
 % MAT-files required: none
 %
-% See also: OTHER_FUNCTION_NAME1,  OTHER_FUNCTION_NAME2
+% See also: http://github.com/johncolby/along-tract-stats/wiki/single-subject
 
 % Author: John Colby (johncolby@ucla.edu)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
