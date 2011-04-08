@@ -60,7 +60,7 @@ track_mean_sc(1:2,:,1) = [0 0 0     -0.1  0    0;  %min
 % Trim if a column of corrected p-values isn't present
 if ~any(strcmp(get(ds, 'VarNames'), 'p0x2Eval0x2Eadj'))
     vars  = vars(1:2);
-    names = names(1:2);
+    names = names(1:2,:);
     track_mean_sc = track_mean_sc(:,1:5,1);
 end
 track_mean_sc_str = trk_restruc(track_mean_sc);
@@ -95,7 +95,7 @@ for iTrk=1:length(Tracts)
         if ~isempty(starting_pts_in)
             pt_start = double(starting_pts_in(strcmp(subStr, starting_pts_in.Subject) &...
                 strcmp(Tracts{iTrk}, starting_pts_in.Tract) &...
-                strcmp(Hemispheres{iTrk}, starting_pts_in.Hemisphere),4:6));
+                strcmp(Hemispheres{iHemi}, starting_pts_in.Hemisphere),4:6));
         end
         
         % Reorient streamlines according to 'pt_start'. Determine
