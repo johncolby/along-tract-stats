@@ -1,7 +1,7 @@
-function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,outDir,starting_pts_in, saveTrk, saveASCII)
+function [track_means,starting_pts_out,nPts] = trk_compile_data(subsDir,subIDs,tract_info,outDir,starting_pts_in, saveTrk, saveASCII)
 %TRK_COMPILE_DATA - Compiles along-tract data for subjects/hemispheres/tracts
 %
-% Syntax: [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_info,outDir,starting_pts_in,saveTrk,saveASCII)
+% Syntax: [track_means,starting_pts_out,nPts] = trk_compile_data(subsDir,subIDs,tract_info,outDir,starting_pts_in,saveTrk,saveASCII)
 %
 % Inputs:
 %    subsDir    - Path to subject directory [char]
@@ -20,6 +20,8 @@ function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_
 %    starting_pts_out - Dataset with tract origins used for flipping. Possibly a
 %        combination of defaults stored in the tract_info dataset, and
 %        interactively chosen ones.
+%    nPts             - The number of interpolation points used for each tract
+%                       and subject [nTracts x nSubjects]
 %
 % Output files:
 %    starting_pts_out.txt - Same as above
@@ -43,7 +45,7 @@ function [track_means,starting_pts_out] = trk_compile_data(subsDir,subIDs,tract_
 %    subIDs          = {'subject1'};
 %    tract_info      = dataset('file', fullfile(exDir, 'tract_info.txt'));
 %    starting_pts_in = dataset('file', fullfile(exDir, 'starting_pts_out.txt'));
-%    [track_means,starting_pts_out] = trk_compile_data(exDir,subIDs,tract_info,[],starting_pts_in,1,1);
+%    [track_means,starting_pts_out,nPts] = trk_compile_data(exDir,subIDs,tract_info,[],starting_pts_in,1,1);
 %
 % Other m-files required: read_avw, trk_read, trk_interp, trk_flip, trk_restruc,
 % trk_add_sc, trk_mean_sc, trk_plot, trk_write_ascii, dataset, export
@@ -81,13 +83,13 @@ fid2 = fopen(fullfile(outDir, 'trk_data.txt'), 'wt');
 fprintf(fid2, 'ID\tPoint\tHemisphere\tTract\tFA\tSD');
 
 % Initialize variables
-track_means = struct([]);
+track_means      = struct([]);
 starting_pts_out = dataset();
+nPts             = zeros(length(tract_info),length(subIDs));
 
 %% Main loop to extract along-tract properties
 % Loop over tracks
 for iTrk=1:length(tract_info)
-    nPts_set = 0;
     iplot    = 1;
     fh       = figure; hold on
     
@@ -109,17 +111,14 @@ for iTrk=1:length(tract_info)
             [header tracks] = trk_read(trkPath);
             
             % Determine # of interpolation points
-            if nPts_set == 0
-                if isnan(tract_info.nPts(iTrk))
-                    nPts = round(mean(trk_length(tracks))/header.voxel_size(1));
-                else
-                    nPts = tract_info.nPts(iTrk);
-                end
-                nPts_set = 1;
+            if isnan(tract_info.nPts(iTrk))
+                nPts(iTrk,i) = round(mean(trk_length(tracks))/header.voxel_size(1));
+            else
+                nPts(iTrk,i) = tract_info.nPts(iTrk);
             end
             
             % Interpolate streamlines
-            tracks_interp = trk_interp(tracks, nPts);
+            tracks_interp = trk_interp(tracks, nPts(iTrk,i));
             
             % Determine 'pt_start' near tract origin. First look in
             % 'starting_pts_in' if available, and then the 'tract_info' defaults
@@ -147,7 +146,7 @@ for iTrk=1:length(tract_info)
             
             % Write outputs
             fprintf(fid1, '\n%s\t%s\t%s\t%d', subStr, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk}, header.n_count);
-            for iPt=1:nPts
+            for iPt=1:nPts(iTrk,i)
                 fprintf(fid2, '\n%s\t%d\t%s\t%s\t%0.4f\t%0.4f', subStr, iPt, tract_info.Hemisphere{iTrk}, tract_info.Tract{iTrk}, scalar_mean(iPt), scalar_sd(iPt));
             end
             
