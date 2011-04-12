@@ -68,7 +68,7 @@ elseif ~iscell(starting_pts_in.Subject) % Reformat to cells if subIDs are all nu
 end
 if nargin < 4 || isempty(outDir), outDir = pwd; end
 if nargin < 3, error('Need more input arguments'), end
-if isnumeric(subIDs), subIDs = num2cell(subIDs); end
+if isnumeric(subIDs), subIDs = cellstr(num2str(subIDs)); end
 
 tract_info.startPt = cell2mat(cellfun(@eval, tract_info.startPt, 'UniformOutput',false));
 tract_info.view    = cell2mat(cellfun(@eval, tract_info.view, 'UniformOutput',false));
@@ -100,7 +100,7 @@ for iTrk=1:length(tract_info)
         try
             % Load scalar volume
             % Note: Modify path according to your directory setup
-            subStr  = num2str(subIDs{i});
+            subStr  = subIDs{i};
             volPath = fullfile(subsDir, subStr, 'dti_fa.nii.gz');
             volume  = read_avw(volPath);
             
