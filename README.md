@@ -1,4 +1,4 @@
-*Along*-tract statistics
+Along-tract statistics
 ========================
 1. Overview
 2. Install
@@ -32,19 +32,19 @@ Install
 ### Install
 1. Click the [Downloads](http://github.com/johncolby/along-tract-stats/archives/master) link towards the top-right on Github. Download and extract either the .zip or .tar.gz versions.
 2. Add the `along-tract-stats` directory to your matlab path. (Adjust these paths according to your setup)
-        addpath('/path/to/along-tract-stats')
+    - `addpath('/path/to/along-tract-stats')`
 3. Add the FSL `matlab` directory to your matlab path.
-        addpath('/usr/local/fsl/etc/matlab')
+    - `addpath('/usr/local/fsl/etc/matlab')`
 4. Save these changes with `savepath`.
 5. Set the `$FSLDIR` environment variable in MATLAB.
-        setenv('FSLDIR', '/usr/local/fsl')
+    - `setenv('FSLDIR', '/usr/local/fsl')`
 6. To save this setting for future sessions, consider putting it in your [`startup.m`](http://www.mathworks.com/help/techdoc/ref/startup.html) file.
 
 Support and Usage
 -----------------
 - [Github Wiki](http://github.com/johncolby/along-tract-stats/wiki) - The main source of online documentation. Information on basic usage and tutorials.
 - [Colbyimaging Wiki](http://www.colbyimaging.com/wiki/neuroimaging/along-tract-stats) - Video tutorials (can't be embedded on Github).
-- [Google groups](http://groups.google.com/group/along-tract-stats) - Questions, comments, feedback, bugs, etc.
+- [Github Issues](http://github.com/johncolby/along-tract-stats/issues) - Questions, comments, feedback, bugs, etc.. ([Sign up](https://github.com/signup/free) for a GitHub account first)
 - Offline documentation - There are several sources of offline documentation included with this package:
     - MATLAB help - Type `help <command_name>` at the MATLAB command prompt (e.g. `help trk_plot`) to get specific info on usage, inputs, and outputs for each function.
     - MATLAB demo - Open the index.html file in the `html` directory to see the demo output that is published by `trk_demo.m`
