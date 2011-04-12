@@ -23,7 +23,7 @@ Install
 - [MATLAB Curve Fitting Toolbox](http://www.mathworks.com/products/curvefitting) (or Spline Toolbox prior to r2010b)
 - [FSL](http://www.fmrib.ox.ac.uk/fsl) (mainly for `read_avw`)
 
-### Optional
+### Recommended
 - [MATLAB Statistics Toolbox](http://www.mathworks.com/products/statistics): Nicely handle Excel-type data tables
 - [MATLAB Parallel Computing Toolbox](http://www.mathworks.com/products/parallel-computing): Speed up streamline processing
 - [TrackVis](http://www.trackvis.org): 3D visualization
@@ -43,7 +43,7 @@ Install
 Support and Usage
 -----------------
 - [Github Wiki](http://github.com/johncolby/along-tract-stats/wiki) - The main source of online documentation. Information on basic usage and tutorials.
-- [Colbyimaging Wiki](http://www.colbyimaging.com/wiki/neuroimaging/along-tract-stats) - Video tutorials (can't be embedded on Github).
+- [ColbyImaging Wiki](http://www.colbyimaging.com/wiki/neuroimaging/along-tract-stats) - Video tutorials (can't be embedded on Github).
 - [Github Issues](http://github.com/johncolby/along-tract-stats/issues) - Questions, comments, feedback, bugs, etc.. ([Sign up](https://github.com/signup/free) for a GitHub account first)
 - Offline documentation - There are several sources of offline documentation included with this package:
     - MATLAB help - Type `help <command_name>` at the MATLAB command prompt (e.g. `help trk_plot`) to get specific info on usage, inputs, and outputs for each function.
