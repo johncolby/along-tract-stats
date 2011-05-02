@@ -90,23 +90,25 @@ nPts             = zeros(length(tract_info),length(subIDs));
 %% Main loop to extract along-tract properties
 % Loop over tracks
 for iTrk=1:length(tract_info)
-    iplot    = 1;
-    fh       = figure; hold on
+    ipage   = 1;
+    newpage = 0;
+    fh      = figure; hold on
     
     % Loop over subjects
     for i=1:length(subIDs)
         pt_start = [];
+        if (i-1)/25 == ipage, newpage = 1; end
         
         try
             % Load scalar volume
             % Note: Modify path according to your directory setup
             subStr  = subIDs{i};
+            trkName = sprintf('%s_%s', tract_info.Tract{iTrk}, tract_info.Hemisphere{iTrk});
             volPath = fullfile(subsDir, subStr, 'dti_fa.nii.gz');
             volume  = read_avw(volPath);
             
             % Load tract group
             % Note: Modify path according to your directory setup
-            trkName = sprintf('%s_%s', tract_info.Tract{iTrk}, tract_info.Hemisphere{iTrk});
             trkPath = fullfile(subsDir, subStr, strcat(trkName, '.trk'));
             [header tracks] = trk_read(trkPath);
             
@@ -155,23 +157,24 @@ for iTrk=1:length(tract_info)
             track_mean_sc = [track_mean scalar_mean];
             track_means = [track_means struct('Subject', subStr, 'Tract', tract_info.Tract{iTrk}, 'Hemisphere', tract_info.Hemisphere{iTrk}, 'track_mean_sc_str', trk_restruc(track_mean_sc))];
             
+            % Open a new QC figure if needed
+            if newpage
+                set(gcf, 'PaperSize', [10.5 8])
+                set(gcf, 'PaperPosition', [0 0 10.5 8])
+                print(gcf, '-dpdf', fullfile(outDir, sprintf('Tracking_QC_%s_%d.pdf', trkName, ipage)), '-r300')
+                close(fh)
+                fh = figure; hold on
+                ipage = ipage+1;
+                newpage = 0;
+            end
+            
             % Draw QC figure
             figure(fh)
-            subplot(5,5,i-25*(iplot-1))
+            subplot(5,5,i-25*(ipage-1))
             trk_plot(header, trk_restruc(track_mean_sc), volume, [])
             view(tract_info.view(iTrk,:))
             title(subStr)
             axis off
-            
-            % Open a new QC figure if needed
-            if i/25 == iplot
-                set(gcf, 'PaperSize', [10.5 8])
-                set(gcf, 'PaperPosition', [0 0 10.5 8])
-                print(gcf, '-dpdf', fullfile(outDir, sprintf('Tracking_QC_%s_%d.pdf', trkName, iplot)), '-r300')
-                close(fh)
-                fh = figure; hold on
-                iplot = iplot+1;
-            end
                         
             % Save the mean tract geometry if desired
             if saveTrk
@@ -201,7 +204,7 @@ for iTrk=1:length(tract_info)
     % Save QC figure
     set(gcf, 'PaperSize', [10.5 8])
     set(gcf, 'PaperPosition', [0 0 10.5 8])
-    print(gcf, '-dpdf', fullfile(outDir, sprintf('Tracking_QC_%s_%d.pdf', trkName, iplot)), '-r300')
+    print(gcf, '-dpdf', fullfile(outDir, sprintf('Tracking_QC_%s_%d.pdf', trkName, ipage)), '-r300')
     close(fh)
 end
 
