@@ -83,8 +83,7 @@ Ftests          = subset(models$anova, Term=='Point:Group')
 sigFtests       = which(Ftests$p.value<0.05)
 sigF.Tract      = Ftests$Tract[sigFtests]
 sigF.Hemisphere = Ftests$Hemisphere[sigFtests]
-sigF.trk_data   = subset(trk_data, Tract==sigF.Tract &
-                         Hemisphere==sigF.Hemisphere)
+sigF.trk_data   = merge(trk_data, data.frame(Tract=sigF.Tract, Hemisphere=sigF.Hemisphere))
 
 maxT = doPerms(sigF.trk_data, demog, nPerms)
 
