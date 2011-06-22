@@ -117,7 +117,7 @@ if ~isempty(nPoints_new) && ~isempty(tie_at_center)
     
     parfor iTrk=1:length(tracks)
         dists = sqrt(sum(bsxfun(@minus, tracks_interp(:,:,iTrk), middle).^2,2));
-        [~, ind] = min(dists);
+        [tmp, ind] = min(dists);
         
         first_half  = ppval(pp{iTrk}, linspace(0, lengths(iTrk)*(ind/nPoints_new), ceil(nPoints_new_odd/2)))';
         second_half = ppval(pp{iTrk}, linspace(lengths(iTrk)*(ind/nPoints_new), lengths(iTrk), ceil(nPoints_new_odd/2)))';
