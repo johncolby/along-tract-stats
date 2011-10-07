@@ -1,4 +1,4 @@
-function trk_plot(header,tracks,volume,slices,plottype)
+function trk_plot(header,tracks,volume,slices,plottype,scalar,debug)
 %TRK_PLOT - 3D plot of TrackVis .trk track group
 %
 % Syntax: trk_plot(header,tracks,volume,slices,plottype)
@@ -32,6 +32,8 @@ function trk_plot(header,tracks,volume,slices,plottype)
 % Mar 2010
 
 % Input argument defaults
+if nargin < 7, debug = []; end
+if nargin < 6, scalar = []; end
 if nargin < 5, plottype = []; end
 if nargin < 4  || isempty(slices), slices = header.dim/2; end
 
@@ -39,14 +41,18 @@ if ~isstruct(tracks), error('Tracks must be in structure form. Try running TRK_R
 
 % Plot streamlines
 hold on
+maxpts = max(arrayfun(@(x) size(x.matrix, 1), tracks));
 for iTrk = 1:length(tracks)
     matrix = tracks(iTrk).matrix;
     matrix(any(isnan(matrix),2),:) = [];
     
     if strcmp(plottype, 'rainbow')
-        cline(matrix(:,1), matrix(:,2), matrix(:,3), (0:(size(matrix, 1)-1))/size(matrix, 1))
+        cline(matrix(:,1), matrix(:,2), matrix(:,3), (0:(size(matrix, 1)-1))/(maxpts))
+    elseif strcmp(plottype, 'scalar')
+        cline(matrix(:,1), matrix(:,2), matrix(:,3), matrix(:,3+scalar))
     else
         plot3(matrix(:,1), matrix(:,2), matrix(:,3))
+        if debug, plot3(matrix(:,1), matrix(:,2), matrix(:,3), 'r.'), end
         plot3(matrix(1,1), matrix(1,2), matrix(1,3), 'r.')
     end
 end
