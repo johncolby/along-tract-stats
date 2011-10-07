@@ -41,7 +41,7 @@ function [header,tracks] = trk_add_sc(header,tracks,volume,name)
 % Loop over # of tracks (slow...any faster way?)
 for iTrk=1:length(tracks)
     % Translate continuous vertex coordinates into discrete voxel coordinates
-    vox = ceil(tracks(iTrk).matrix ./ repmat(header.voxel_size, tracks(iTrk).nPoints,1));
+    vox = ceil(tracks(iTrk).matrix(:,1:3) ./ repmat(header.voxel_size, tracks(iTrk).nPoints,1));
     
     % Index into volume to extract scalar values
     inds                = sub2ind(header.dim, vox(:,1), vox(:,2), vox(:,3));
