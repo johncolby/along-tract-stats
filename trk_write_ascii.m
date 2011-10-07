@@ -1,4 +1,4 @@
-function trk_write_ascii(tracks,savePath)
+function trk_write_ascii(header,tracks,savePath)
 %TRK_WRITE_ASCII - Save a tract group in an ascii format for use in R
 %
 % Syntax: trk_write_ascii(tracks,savePath)
@@ -44,7 +44,25 @@ nTracks = size(tracks, 3);
 
 outmat = [permute(repmat(1:nTracks,nPts,1), [1 3 2]) repmat((1:nPts)',[1 1 nTracks]) tracks];
 
-fprintf(fid, 'Streamline\tPoint\tx\ty\tz\tFA\n');
-fprintf(fid, '%i\t%i\t%f\t%f\t%f\t%0.4f\n', permute(outmat,[2 1 3]));
+% Check for scalars
+scalar_names = {};
+for iscalar = 1:header.n_scalars
+    scalar_names{iscalar} = strcat(header.scalar_name(iscalar,:));
+end
+
+% Print header row
+format = 'Streamline\tPoint\tx\ty\tz';
+if ~isempty(scalar_names)
+    scalar_names = join('\t', scalar_names);
+    format = [format '\t' scalar_names];
+end
+fprintf(fid, [format '\n']);
+
+% Print along-tract data
+format = '%i\t%i\t%f\t%f\t%f';
+if ~isempty(scalar_names)
+    format = [format '\t' join('\t', repmat({'%f'}, 1, header.n_scalars))];
+end
+fprintf(fid, [format '\n'], permute(outmat,[2 1 3]));
 
 fclose(fid);
