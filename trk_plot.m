@@ -1,7 +1,7 @@
 function trk_plot(header,tracks,volume,slices,plottype,scalar,debug)
 %TRK_PLOT - 3D plot of TrackVis .trk track group
 %
-% Syntax: trk_plot(header,tracks,volume,slices,plottype)
+% Syntax: trk_plot(header,tracks,volume,slices,plottype,scalar,debug)
 %
 % Inputs:
 %    header  - .trk file header 
@@ -11,8 +11,13 @@ function trk_plot(header,tracks,volume,slices,plottype,scalar,debug)
 %              (Default: header.dim/2) Note: Use MATLAB coordinates.
 %    plottype - (optional) Specify alternative plotting style. (Default is
 %               empty, which simply highlights streamline origins in red)
+%               [string]
 %      rainbow   - Color encodes assumed correspondance, so like colors will be
 %                  collapsed together.
+%      scalar    - Color encode one of the tract scalars
+%    scalar   - (optional) If plottype is 'scalar', specifies which scalar to
+%               use (i.e. which row in header.scalar_name) [num]
+%    debug    - (optional) Highlight individual vertices
 %
 % Outputs:
 %
