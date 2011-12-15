@@ -70,7 +70,7 @@ if nargin>2 && ~isempty(volume)
                          header.voxel_size(3)*(0.5:header.dim(3)));
     h2 = slice(x,y,z,permute(volume, [2 1 3]), slices(1), slices(2), slices(3), 'nearest');
     shading flat
-    if strcmp(plottype, 'rainbow')
+    if any(strcmp(plottype, {'rainbow' 'scalar'}))
         colormap([jet(100);gray(100)])
         slice_cdata = get(h2, 'CData');
         slice_cdata = cellfun(@(x) x+1, slice_cdata, 'UniformOutput', false);
