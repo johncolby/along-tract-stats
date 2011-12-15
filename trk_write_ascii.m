@@ -1,5 +1,6 @@
 function trk_write_ascii(header,tracks,savePath)
-%TRK_WRITE_ASCII - Save a tract group in an ascii format for use in R
+%TRK_WRITE_ASCII - Save a tract group in an ascii format for use in R or other
+%external programs
 %
 % Syntax: trk_write_ascii(header,tracks,savePath)
 %

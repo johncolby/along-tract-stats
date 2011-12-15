@@ -1,6 +1,6 @@
 function [header,tracks] = trk_add_sc(header,tracks,volume,name)
 %TRK_ADD_SC - Attaches a scalar value to each vertex in a .trk track group
-%For example, this function will look in an FA volume, and attach the
+%For example, this function can look in an FA volume, and attach the
 %corresponding voxel FA value to each streamline vertex.
 %
 % Syntax: [header,tracks] = trk_add_sc(header,tracks,volume,name)

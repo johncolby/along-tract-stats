@@ -12,7 +12,7 @@ function trk_plot(header,tracks,volume,slices,plottype,scalar,debug)
 %    plottype - (optional) Specify alternative plotting style. (Default is
 %               empty, which simply highlights streamline origins in red)
 %               [string]
-%      rainbow   - Color encodes assumed correspondance, so like colors will be
+%      rainbow   - Color encodes assumed correspondence, so like colors will be
 %                  collapsed together.
 %      scalar    - Color encode one of the tract scalars
 %    scalar   - (optional) If plottype is 'scalar', specifies which scalar to
@@ -29,7 +29,7 @@ function trk_plot(header,tracks,volume,slices,plottype,scalar,debug)
 % Subfunctions: none
 % MAT-files required: none
 %
-% See also: TRK_READ
+% See also: TRK_READ, CLINE
 %           http://github.com/johncolby/along-tract-stats/wiki/correspondence
 
 % Author: John Colby (johncolby@ucla.edu)
