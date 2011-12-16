@@ -49,11 +49,12 @@ hold on
 maxpts = max(arrayfun(@(x) size(x.matrix, 1), tracks));
 for iTrk = 1:length(tracks)
     matrix = tracks(iTrk).matrix;
-    matrix(any(isnan(matrix),2),:) = [];
+    matrix(any(isnan(matrix(:,1:3)),2),:) = [];
     
     if strcmp(plottype, 'rainbow')
         cline(matrix(:,1), matrix(:,2), matrix(:,3), (0:(size(matrix, 1)-1))/(maxpts))
     elseif strcmp(plottype, 'scalar')
+        matrix(isnan(matrix(:,3+scalar)),:) = [];
         cline(matrix(:,1), matrix(:,2), matrix(:,3), matrix(:,3+scalar))
     else
         plot3(matrix(:,1), matrix(:,2), matrix(:,3))

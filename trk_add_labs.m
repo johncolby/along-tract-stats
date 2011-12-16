@@ -73,6 +73,8 @@ function [header,tracks,info] = trk_add_labs(header,tracks,proto,spacing,method,
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
 % Oct 2011
 
+if nargin < 6, opts = struct(); end
+if nargin < 5 || isempty(method), error('Must specify a method.'); end
 if isempty(spacing), spacing = 4; end
 info = [];
 
@@ -135,7 +137,7 @@ if(isempty(info))
     % have enough memory to operate on all voxels at once
     [dists, labs] = deal(zeros(length(centers), 1));
     for ivox=1:length(centers)
-        [dists(ivox), labs(ivox)] = min(sqrt(sum(bsxfun(@minus, centers(ivox,:), proto.matrix).^2, 2)));
+        [dists(ivox), labs(ivox)] = min(sqrt(sum(bsxfun(@minus, centers(ivox,:), proto.matrix(:,1:3)).^2, 2)));
     end
     
     % Save assignment info for future reuse
@@ -150,7 +152,7 @@ end
 
 % Assign vertices of other fibers to vertices on the prototype
 for iTrk=1:length(tracks)
-    inds = ceil(bsxfun(@minus, tracks(iTrk).matrix, [min(info.xgrid) min(info.ygrid) min(info.zgrid)]) / info.grid_spacing);
+    inds = ceil(bsxfun(@minus, tracks(iTrk).matrix(:,1:3), [min(info.xgrid) min(info.ygrid) min(info.zgrid)]) / info.grid_spacing);
     labs = info.lm(sub2ind(size(info.lm), inds(:,2), inds(:,1), inds(:,3)));
     
     % Limit the number of fiber points that match the prototype endpoints
@@ -175,14 +177,14 @@ function tracks = doOP(tracks,proto,tan_thresh,euc_thresh)
 for iTrk=1:length(tracks)
     % Calculate displacement vectors between all vertex pairs
     [X Y] = meshgrid(1:size(tracks(iTrk).matrix,1), 1:size(proto.matrix,1));
-    v = proto.matrix(Y(:),:) - tracks(iTrk).matrix(X(:),:);
+    v = proto.matrix(Y(:),1:3) - tracks(iTrk).matrix(X(:),1:3);
     
     % Calculate Euclidean distances
     D_euc = sqrt(sum(v.^2, 2));
     distmat_euc = reshape(D_euc, size(X));
     
     % Calculate tangent tensors along prototype
-    tangents = diff(proto.matrix);
+    tangents = diff(proto.matrix(:,1:3));
     tangents = bsxfun(@rdivide, tangents, sqrt(sum(tangents.^2, 2))); %normalize to unit length
     for iseg=1:length(tangents)
         M(:,:,iseg) = tangents(iseg,:)' * tangents(iseg,:);
