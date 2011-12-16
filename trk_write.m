@@ -7,7 +7,7 @@ function trk_write(header,tracks,savePath)
 %    header   - Header information for .trk file [struc]
 %    tracks   - Track data struc array [1 x nTracks]
 %      nPoints  - # of points in each track
-%      matrix   - XYZ coordinates and associated scalars [nPoints x 3+nScalars]
+%      matrix   - XYZ coordinates (in mm) and associated scalars [nPoints x 3+nScalars]
 %      props    - Properties of the whole tract
 %    savePath - Path where .trk file will be saved [char]
 %

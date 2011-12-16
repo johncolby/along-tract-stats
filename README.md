@@ -15,6 +15,12 @@ This package contains 3 things:
 2. **Experiment wrappers** - Several examples of how you can link these tools together to perform a full analysis. These will be a good starting point to adapt to your own needs.
 3. **Example data** - So you can get a feel for running these tools and verify that they are behaving the same way as in the example documentation.
 
+An accompanying manuscript has been published in the journal NeuroImage. If you find these tools useful, please cite this work as:
+
+Colby J. B., Soderberg L., Lebel C., Dinov I. D., Thompson P. M., and Sowell E. R.. Along-tract statistics allow for enhanced tractography analysis. *Neuroimage*. In press.
+
+DOI: [10.1016/j.neuroimage.2011.11.004](http://dx.doi.org/10.1016/j.neuroimage.2011.11.004)
+
 Install
 -------
 ### Requirements

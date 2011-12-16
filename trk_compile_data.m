@@ -120,7 +120,8 @@ for iTrk=1:length(tract_info)
             end
             
             % Interpolate streamlines
-            tracks_interp = trk_interp(tracks, nPts(iTrk,i));
+            tracks_interp = trk_interp(tracks, nPts(iTrk,i), [], 1);
+            nPts(iTrk,i)  = size(tracks_interp, 1);
             
             % Determine 'pt_start' near tract origin. First look in
             % 'starting_pts_in' if available, and then the 'tract_info' defaults

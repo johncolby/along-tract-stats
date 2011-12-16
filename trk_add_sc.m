@@ -1,6 +1,6 @@
 function [header,tracks] = trk_add_sc(header,tracks,volume,name)
 %TRK_ADD_SC - Attaches a scalar value to each vertex in a .trk track group
-%For example, this function will look in an FA volume, and attach the
+%For example, this function can look in an FA volume, and attach the
 %corresponding voxel FA value to each streamline vertex.
 %
 % Syntax: [header,tracks] = trk_add_sc(header,tracks,volume,name)
@@ -41,7 +41,7 @@ function [header,tracks] = trk_add_sc(header,tracks,volume,name)
 % Loop over # of tracks (slow...any faster way?)
 for iTrk=1:length(tracks)
     % Translate continuous vertex coordinates into discrete voxel coordinates
-    vox = ceil(tracks(iTrk).matrix ./ repmat(header.voxel_size, tracks(iTrk).nPoints,1));
+    vox = ceil(tracks(iTrk).matrix(:,1:3) ./ repmat(header.voxel_size, tracks(iTrk).nPoints,1));
     
     % Index into volume to extract scalar values
     inds                = sub2ind(header.dim, vox(:,1), vox(:,2), vox(:,3));
