@@ -65,8 +65,11 @@ parfor iTrk=1:length(tracks)
     segs = sqrt(sum((tracks_tmp.matrix(2:end,1:3) - tracks_tmp.matrix(1:(end-1),1:3)).^2, 2));
     dist = [0; cumsum(segs)];
     
+    % Remove duplicates
+    dups = [0; segs==0];
+    
     % Fit spline
-    pp{iTrk} = spline(dist, tracks_tmp.matrix');
+    pp{iTrk} = spline(dist(~dups), tracks_tmp.matrix(~dups,:)');
     
     % Resample streamline along the spline
     tracks_interp(:,:,iTrk) = ppval(pp{iTrk}, linspace(0, max(dist), nPoints_new))';
