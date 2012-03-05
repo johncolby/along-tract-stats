@@ -12,7 +12,7 @@ function [tracks_out pt_start] = trk_flip(header,tracks_in,pt_start,volume,slice
 %    header    - Header information from .trk file [struc]
 %    tracks_in - Tracks in matrix or structure form. Should NOT be padded with
 %                NaNs.
-%    pt_start  - XYZ voxel coordinates to which streamline start points will be
+%    pt_start  - XYZ coordinates (in mm) to which streamline start points will be
 %                matched. If not given, will determine interactively. [1 x 3]
 %    volume    - (optional) Useful if determining pt_start interactively
 %    slices    - (optional) Slice planes for 'volume'
@@ -67,10 +67,31 @@ if nargin < 3 || isempty(pt_start) || any(isnan(pt_start))
     pt_start = c_info.Position;
 end
 
-tracks_out = tracks_in;
-
 % Fast algebra if streamlines are all the same length
 if isnumeric(tracks_in)
+    [tracks_out ind] = trk_flip_mat(tracks_in, pt_start);
+
+% Otherwise, loop through one by one
+else
+    tracks_out = tracks_in;
+    [tmp ind] = trk_flip_mat(trk_interp(tracks_in, 100), pt_start);
+    if size(tracks_in(1).matrix, 2) > 3
+       error('Streamlines should be flipped before scalars are attached.') 
+    end
+    for iTrk=1:length(tracks_in)
+        % Flip the tracks whose first points are not closest to 'pt_start'
+        if ind(iTrk);
+            tracks_out(iTrk).matrix   = flipud(tracks_in(iTrk).matrix);
+            if isfield(tracks_out, 'tiePoint')
+                tracks_out(iTrk).tiePoint = tracks_out(iTrk).nPoints - (tracks_out(iTrk).tiePoint-1);
+            end
+        end
+    end
+end
+
+function [tracks_out ind] = trk_flip_mat(tracks_in,pt_start)
+    tracks_out = tracks_in;
+
     if any(isnan(tracks_in(:)))
         error('If you are going to deal with streamlines padded with NaNs (i.e. different lengths), they should be flipped FIRST.')
     end
@@ -86,26 +107,14 @@ if isnumeric(tracks_in)
     % Flip the tracks whose first points are not closest to 'pt_start'
     ind                 = point_end < point_1;
     tracks_out(:,:,ind) = tracks_in(fliplr(1:end),:,ind);
-
-% Otherwise, loop through one by one
-else
-    if any(isnan(cat(1,tracks_in.matrix)))
-        error('If you are going to deal with streamlines padded with NaNs (i.e. different lengths), they should be flipped FIRST.')
+    
+    % Do a second pass comparing all points to the mean tract geometry
+    if length(size(tracks_in))>2
+        track_mean = mean(tracks_out, 3);
+        dists      = squeeze(sqrt(sum(bsxfun(@minus, tracks_in, track_mean).^2, 2)));
+        dists_rev  = squeeze(sqrt(sum(bsxfun(@minus, tracks_in, flipud(track_mean)).^2, 2)));
+        %ind        = logical(mode(double(dists > dists_rev), 1)); % weight all points equally
+        ind        = mean(dists) > mean(dists_rev); % weight points by distance from prototype
+        tracks_out = tracks_in;
+        tracks_out(:,:,ind) = tracks_in(fliplr(1:end),:,ind);
     end
-    if size(tracks_in(1).matrix, 2) > 3
-       error('Streamlines should be flipped before scalars are attached.') 
-    end
-    for iTrk=1:length(tracks_in)
-        % Determine if the first or last track point is closer to 'pt_start'
-        point_1   = sqrt(sum((tracks_in(iTrk).matrix(1,:) - pt_start).^2));
-        point_end = sqrt(sum((tracks_in(iTrk).matrix(end,:) - pt_start).^2));
-        
-        % Flip the tracks whose first points are not closest to 'pt_start'
-        if point_end < point_1;
-            tracks_out(iTrk).matrix   = flipud(tracks_in(iTrk).matrix);
-            if isfield(tracks_out, 'tiePoint')
-                tracks_out(iTrk).tiePoint = tracks_out(iTrk).nPoints - (tracks_out(iTrk).tiePoint-1);
-            end
-        end
-    end
-end
