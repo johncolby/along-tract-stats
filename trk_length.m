@@ -26,7 +26,7 @@ function lengths = trk_length(tracks)
 % Apr 2010
  
 % Put in matrix form if possible
-if isstruct(tracks) && length(unique(cat(tracks.nPoints)))==1
+if isstruct(tracks) && length(unique([tracks.nPoints]))==1
     tracks = trk_restruc(tracks);
 end
 
