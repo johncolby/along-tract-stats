@@ -54,7 +54,7 @@ iz([ix iy]) = [];
 
 % Parse in body
 if header.n_count > 0
-    max_n_trks = header.n_count;
+	max_n_trks = header.n_count;
 else
 	% Unknown number of tracks; we'll just have to read until we run out.
 	max_n_trks = inf;
@@ -90,6 +90,10 @@ while iTrk <= max_n_trks
     end
     tracks(iTrk).matrix(:,1:3) = coords;
 	iTrk = iTrk + 1;
+end
+
+if header.n_count == 0
+	header.n_count = iTrk;
 end
 
 fclose(fid);
