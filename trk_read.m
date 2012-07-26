@@ -72,9 +72,9 @@ while iTrk <= max_n_trks
 		break;
 	end
     tracks(iTrk).nPoints = pts;
-    tracks(iTrk).matrix  = fread(fid, [3+header.n_scalars, tracks(iTrk).nPoints], 'float')';
+    tracks(iTrk).matrix  = fread(fid, [3+header.n_scalars, tracks(iTrk).nPoints], '*float')';
     if header.n_properties
-        tracks(iTrk).props = fread(fid, header.n_properties, 'float');
+        tracks(iTrk).props = fread(fid, header.n_properties, '*float');
     end
     
     % Modify orientation of tracks (always LPS) to match orientation of volume
