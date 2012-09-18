@@ -53,13 +53,28 @@ iz = 1:3;
 iz([ix iy]) = [];
 
 % Parse in body
-tracks(header.n_count).nPoints = 0;
+if header.n_count > 0
+	max_n_trks = header.n_count;
+else
+	% Unknown number of tracks; we'll just have to read until we run out.
+	max_n_trks = inf;
+end
 
-for iTrk = 1:header.n_count
-    tracks(iTrk).nPoints = fread(fid, 1, 'int');
-    tracks(iTrk).matrix  = fread(fid, [3+header.n_scalars, tracks(iTrk).nPoints], 'float')';
+% It's impossible to preallocate the "tracks" variable because we don't
+% know the number of points on each curve ahead of time; we find out by
+% reading the file.  The line below suppresses preallocation warnings.
+%#ok<*AGROW>
+
+iTrk = 1;
+while iTrk <= max_n_trks
+	pts = fread(fid, 1, 'int');
+	if feof(fid)
+		break;
+	end
+    tracks(iTrk).nPoints = pts;
+    tracks(iTrk).matrix  = fread(fid, [3+header.n_scalars, tracks(iTrk).nPoints], '*float')';
     if header.n_properties
-        tracks(iTrk).props = fread(fid, header.n_properties, 'float');
+        tracks(iTrk).props = fread(fid, header.n_properties, '*float');
     end
     
     % Modify orientation of tracks (always LPS) to match orientation of volume
@@ -74,6 +89,11 @@ for iTrk = 1:header.n_count
         coords(:,iy) = header.dim(iy)*header.voxel_size(iy) - coords(:,iy);
     end
     tracks(iTrk).matrix(:,1:3) = coords;
+	iTrk = iTrk + 1;
+end
+
+if header.n_count == 0
+	header.n_count = iTrk;
 end
 
 fclose(fid);
