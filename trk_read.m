@@ -52,6 +52,10 @@ if header.hdr_size~=1000, error('Header length is wrong'), end
 iz = 1:3;
 iz([ix iy]) = [];
 
+% Fix volume dimensions to match the reported orientation.
+header.dim        = header.dim([ix iy iz]);
+header.voxel_size = header.voxel_size([ix iy iz]);
+
 % Parse in body
 if header.n_count > 0
 	max_n_trks = header.n_count;
@@ -78,8 +82,6 @@ while iTrk <= max_n_trks
     end
     
     % Modify orientation of tracks (always LPS) to match orientation of volume
-    header.dim        = header.dim([ix iy iz]);
-    header.voxel_size = header.voxel_size([ix iy iz]);
     coords = tracks(iTrk).matrix(:,1:3);
     coords = coords(:,[ix iy iz]);
     if header.image_orientation_patient(ix) < 0
@@ -93,7 +95,7 @@ while iTrk <= max_n_trks
 end
 
 if header.n_count == 0
-	header.n_count = iTrk;
+	header.n_count = length(tracks);
 end
 
 fclose(fid);
